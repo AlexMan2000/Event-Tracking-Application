@@ -1,9 +1,8 @@
-package com.example.emsbackend.tests.lombokTest;
+package com.example.emsbackend.tests.lombokTests;
 
 import lombok.Cleanup;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;

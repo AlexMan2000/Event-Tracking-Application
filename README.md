@@ -2,10 +2,10 @@
 
 ## Week 1 搭建前后端框架
 
-20240518: 搭建前后端脚手架
+20240518: 搭建前后端脚手架，测试后端接口
 
-- 后端: SpringBoot3 + JPA
-- 前端: React&Vite
+- 已跑通controller-service-dto流程
+- 
 
 
 

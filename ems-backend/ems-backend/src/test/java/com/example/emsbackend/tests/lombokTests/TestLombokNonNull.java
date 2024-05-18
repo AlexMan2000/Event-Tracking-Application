@@ -1,4 +1,4 @@
-package com.example.emsbackend.tests.lombokTest;
+package com.example.emsbackend.tests.lombokTests;
 
 import lombok.NonNull;
 

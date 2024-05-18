@@ -1,15 +1,27 @@
 package com.example.emsbackend.api.dto;
 
-
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
-@Builder
+import java.sql.Date;
+
+//@Builder
+@Data
 public class DagEntityDTO {
 
-    public String dagId;
-    public boolean isPaused;
-    public boolean isSubDag;
-    public boolean isActive;
-    public String owner;
+    private String dagId;
+    private Boolean isPaused;
+    private Boolean isSubdag;
+    private Boolean isActive;
+    private Date lastSchedulerRun;
+    private Date lastPickled;
+    private Date lastExpired;
+    private Boolean schedulerLock;
+    private Integer pickleId;
+    private String fileloc;
+    private String owners;
+    private Long id;
 
 }

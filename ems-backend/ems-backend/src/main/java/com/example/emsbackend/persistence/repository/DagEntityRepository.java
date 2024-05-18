@@ -12,5 +12,5 @@ public interface DagEntityRepository extends JpaRepository<DagEntity, Long> {
 
     List<DagEntity> findByOwners(String ownerName);
 
-    DagEntity findFirstById(Long id);
+    DagEntity findFirstByDagId(String id);
 }

@@ -2,7 +2,7 @@ package com.example.emsbackend.api.controller;
 
 
 import com.example.emsbackend.api.dto.DagEntityDTO;
-import com.example.emsbackend.service.DagService;
+import com.example.emsbackend.service.impl.DagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,15 +23,20 @@ public class DagController {
     }
 
 
-    @GetMapping("/id/{id}")
-    public ResponseEntity<DagEntityDTO> getDagById(@PathVariable Long id) {
-        DagEntityDTO dagEntityDTO = dagService.getDagDtoById(id);
-        return ResponseEntity.ok(dagEntityDTO);
+    @GetMapping("/id/{dagId}")
+    public ResponseEntity<DagEntityDTO> getDagById(@PathVariable String dagId) {
+        DagEntityDTO dagEntityDTO = dagService.getDagDtoById(dagId);
+        return dagEntityDTO != null ? ResponseEntity.ok(dagEntityDTO): ResponseEntity.notFound().build();
     }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<List<DagEntityDTO>> getDagByOwners(@PathVariable String name) {
         List<DagEntityDTO> dagEntityDTOs = dagService.getDagDtoByOwners(name);
-        return ResponseEntity.ok(dagEntityDTOs);
+        return dagEntityDTOs.size() != 0 ? ResponseEntity.ok(dagEntityDTOs): ResponseEntity.notFound().build();
     }
+
+
+
+
+
 }
