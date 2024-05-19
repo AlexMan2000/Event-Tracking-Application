@@ -2,16 +2,13 @@ package com.example.emsbackend.api.controller;
 
 
 import com.example.emsbackend.api.dto.DagEntityDTO;
-import com.example.emsbackend.persistence.entity.DagEntity;
 import com.example.emsbackend.service.impl.DagService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -50,6 +47,16 @@ public class DagController {
 
 
     /**
+     * Get all dag entities
+     * @return
+     */
+    @GetMapping("/all")
+    public ResponseEntity<List<DagEntityDTO>> getAllDags() {
+        return ResponseEntity.ok(dagService.getAllDags());
+    }
+
+
+    /**
      * Check if a dagId is already in the database
      * @param id the id to be checked
      * @return true if there is duplicate key; false otherwise
@@ -83,6 +90,30 @@ public class DagController {
         }
     }
 
-    
+
+
+    /* PUT APIs */
+    @PutMapping("/update/{dagId}")
+    public ResponseEntity<DagEntityDTO> updateDagEntity(@PathVariable String dagId, @RequestBody DagEntityDTO dagEntity) {
+        DagEntityDTO dagEntityDTO = dagService.updateDagEntity(dagId, dagEntity);
+        if (dagEntityDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(dagEntityDTO);
+
+    }
+
+
+
+    /* DELETE APIs */
+    @DeleteMapping("/delete/{dagId}")
+    public ResponseEntity<String> deleteDagEntity(@PathVariable String dagId) {
+        DagEntityDTO dagEntityDTO = dagService.deleteDagEntity(dagId);
+        if (dagEntityDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok("Dag deleted successfully!");
+    }
+
 
 }

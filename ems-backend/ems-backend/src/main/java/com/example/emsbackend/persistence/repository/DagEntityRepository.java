@@ -2,6 +2,7 @@ package com.example.emsbackend.persistence.repository;
 
 
 import com.example.emsbackend.persistence.entity.DagEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +15,10 @@ public interface DagEntityRepository extends JpaRepository<DagEntity, Long> {
 
     DagEntity findFirstByDagId(String id);
 
+    DagEntity findByDagId(String id);
+
     boolean existsByDagId(String id);
+
+    @Transactional
+    void deleteByDagId(String id);
 }

@@ -5,8 +5,10 @@ import com.example.emsbackend.persistence.entity.DagEntity;
 import com.example.emsbackend.persistence.repository.DagEntityRepository;
 import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +48,19 @@ public class DagService implements com.example.emsbackend.service.DagService {
                             .collect(Collectors.toList()): null;
     }
 
+    @Override
+    public List<DagEntityDTO> getAllDags() {
+        return dagRepository.findAll().stream().map(dagEntity -> entityToDto(dagEntity)).collect(Collectors.toList());
+    }
+
+
+    @Override
+    public boolean checkIDDuplicate(String id) {
+        return dagRepository.existsByDagId(id);
+    }
+
+
+
 
     /* POST APIs */
     @Override
@@ -54,6 +69,7 @@ public class DagService implements com.example.emsbackend.service.DagService {
         DagEntity dagEntity = dtoToEntity(dagEntityDTO);
         dagEntity.setId(longGenerator.incrementAndGet());
         try {
+            // If dagEntity contains the primary key, and the primary key exists in DB, perform update; otherwise, perform insertion
             DagEntity savedDagEntity = dagRepository.save(dagEntity);
             return entityToDto(savedDagEntity);
         } catch (DataIntegrityViolationException e) {
@@ -64,14 +80,34 @@ public class DagService implements com.example.emsbackend.service.DagService {
         }
     }
 
+
+
+    /* PUT APIs */
     @Override
-    public boolean checkIDDuplicate(String id) {
-        return dagRepository.existsByDagId(id);
+    public DagEntityDTO updateDagEntity(String dagId, DagEntityDTO updatedDagEntityDto) {
+        DagEntity dagEntity = dagRepository.findByDagId(dagId);
+        if (dagEntity == null) {
+            return null;
+        }
+        Long entityId = dagEntity.getId();
+        DagEntity updatedDagEntity = dtoToEntity(updatedDagEntityDto);
+        BeanUtils.copyProperties(updatedDagEntity, dagEntity);
+        dagEntity.setId(entityId);
+        DagEntity updatedDagEntity_ = dagRepository.save(dagEntity);
+        return entityToDto(updatedDagEntity_);
     }
 
 
 
-
+    /* DELETE APIs */
+    public DagEntityDTO deleteDagEntity(String dagId) {
+        DagEntity dagEntity = dagRepository.findByDagId(dagId);
+        if (dagEntity == null) {
+            return null;
+        }
+        dagRepository.deleteByDagId(dagId);
+        return entityToDto(dagEntity);
+    }
 
 
     /* -------------------- Helper functions ----------------*/

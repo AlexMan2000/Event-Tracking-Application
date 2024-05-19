@@ -5,11 +5,7 @@
 20240518: 搭建前后端脚手架，测试后端接口
 
 - 已跑通controller-service-dto流程
-- 完成下列GET/POST后端接口
-  - getDagById
-  - getDagByOwner
-  - checkDuplicateId
-  - createOrInsertDag
+- 已完成DagEntity的CRUD操作
 
 
 
