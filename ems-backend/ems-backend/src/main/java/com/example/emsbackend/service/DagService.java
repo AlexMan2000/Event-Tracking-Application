@@ -10,8 +10,12 @@ public interface DagService {
      DagEntityDTO getDagDtoById(String dag_id);
      List<DagEntityDTO> getDagDtoByOwners(String name);
 
+     boolean checkIDDuplicate(String id);
+
 
     /* POST APIs */
+    DagEntityDTO createOrUpdateDagEntity(DagEntityDTO dagEntityDTO);
+
 
 
 

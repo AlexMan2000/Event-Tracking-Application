@@ -5,6 +5,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
+
 @SpringBootApplication
 public class EmsBackendApplication {
 
@@ -16,7 +19,8 @@ public class EmsBackendApplication {
 		return new ModelMapper();
 	};
 
-
+	@Bean
+	public AtomicLong getTimeCounter() { return new AtomicLong(); }
 
 	public static void main(String[] args) {
 		SpringApplication.run(EmsBackendApplication.class, args);
