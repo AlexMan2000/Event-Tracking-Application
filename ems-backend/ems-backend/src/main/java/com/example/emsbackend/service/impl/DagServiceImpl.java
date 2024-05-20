@@ -3,6 +3,7 @@ package com.example.emsbackend.service.impl;
 import com.example.emsbackend.api.dto.DagEntityDTO;
 import com.example.emsbackend.persistence.entity.DagEntity;
 import com.example.emsbackend.persistence.repository.DagEntityRepository;
+import com.example.emsbackend.service.DagService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Service
-public class DagService implements com.example.emsbackend.service.DagService {
+public class DagServiceImpl implements DagService {
 
     private final DagEntityRepository dagRepository;
     private final ModelMapper modelMapper;
@@ -22,7 +23,7 @@ public class DagService implements com.example.emsbackend.service.DagService {
 
     // IOC
     @Autowired
-    public DagService(DagEntityRepository dagRepository
+    public DagServiceImpl(DagEntityRepository dagRepository
             , ModelMapper modelMapper
             , AtomicLong longGenerator) {
         this.dagRepository = dagRepository;

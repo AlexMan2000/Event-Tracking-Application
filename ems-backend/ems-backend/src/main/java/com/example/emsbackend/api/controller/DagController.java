@@ -2,7 +2,7 @@ package com.example.emsbackend.api.controller;
 
 
 import com.example.emsbackend.api.dto.DagEntityDTO;
-import com.example.emsbackend.service.impl.DagService;
+import com.example.emsbackend.service.impl.DagServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -15,10 +15,10 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @RequestMapping("/dags")
 public class DagController {
-    private final DagService dagService;
+    private final DagServiceImpl dagService;
 
     @Autowired
-    public DagController(DagService dagService) {
+    public DagController(DagServiceImpl dagService) {
         this.dagService = dagService;
     }
 
