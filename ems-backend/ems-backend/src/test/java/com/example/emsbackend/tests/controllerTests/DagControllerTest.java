@@ -6,7 +6,7 @@
 //
 //import com.example.emsbackend.api.controller.DagController;
 //import com.example.emsbackend.api.dto.DagEntityDTO;
-//import com.example.emsbackend.service.impl.DagService;
+//import com.example.emsbackend.service.DagService;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -31,10 +31,10 @@
 //    public void getDagByIdTest() throws Exception {
 //        DagEntityDTO mockDag = new DagEntityDTO();
 //        mockDag.setId(1L);
-//        mockDag.setName("Test DAG");
+//        mockDag.setOwners("Test DAG");
 //        mockDag.setIsActive(true);
 //
-//        given(dagService.getDagDtoById(1L)).willReturn(mockDag);
+//        given(dagService.getDagDtoById("dag_1")).willReturn(mockDag);
 //
 //        mockMvc.perform(get("/dags/id/1")
 //                        .accept(MediaType.APPLICATION_JSON))

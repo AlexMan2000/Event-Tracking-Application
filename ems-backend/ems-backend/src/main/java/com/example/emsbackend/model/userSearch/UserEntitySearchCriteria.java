@@ -1,12 +1,11 @@
-package com.example.emsbackend.api.dto;
+package com.example.emsbackend.model.userSearch;
 
-import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
-import java.util.Date;
+import java.sql.Date;
+
 @Data
-public class UserEntityDTO {
+public class UserEntitySearchCriteria {
     private Long id;
     private Long roleId;
     private String firstName;

@@ -1,13 +1,17 @@
 package com.example.emsbackend.persistence.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 @Entity
+@Data
 @Table(name="permission")
 public class PermissionEntity {
     @Id
@@ -27,12 +31,18 @@ public class PermissionEntity {
     @Column(name = "active")
     private Boolean active;
 
+
+    // DateTime at database
+    @JsonFormat(timezone="GMT-5", pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "createdAt", nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
+    @JsonFormat(timezone="GMT-5", pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     private Date updatedAt;
 
     @Column(name = "content", columnDefinition = "TEXT")

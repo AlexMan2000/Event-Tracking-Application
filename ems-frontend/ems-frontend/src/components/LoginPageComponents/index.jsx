@@ -1,16 +1,70 @@
 import React, { useState } from "react";
 import { Form, Input, Button, Checkbox, Modal,Card} from 'antd';
+import { useNavigate} from 'react-router-dom';
+
 // import 'antd/dist/antd.css';
 import "./index.css"
+import axios from 'axios';
+
+async function hashPasswordSHA256(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+
+
 
 const LoginPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loginForm] = Form.useForm();
+  const [registerForm] = Form.useForm();
+  const navigate = useNavigate();
 
-  const onFinish = (values) => {
-    console.log('Success:', values);
+
+  const onLoginFinish = (values) => {
+    hashPasswordSHA256(values["password"]).then(hashedPassword => {
+      axios.get("http://127.0.0.1:8083/login/user", 
+      {
+        email: values["email"],
+        passwordHash: hashedPassword
+      }
+      , 
+      {
+        timeout: 5000
+      }).then(response => {
+        if (response.status === 200) {
+          // 跳转到主界面
+          navigate("/home")
+        } else {
+          console.log(response);
+        }
+      })
+    })
+    loginForm.resetFields();
   };
 
-  const onFinishFailed = (errorInfo) => {
+  const onLoginFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  const onRegisterFinish = (values) => {
+    hashPasswordSHA256(values["password"]).then(hashedPassword => {
+      axios.post("http://127.0.0.1:8083/users/register", 
+      {"passwordHash": hashedPassword
+        ,...values
+      }
+      , 
+      {
+        timeout: 5000
+      })
+    })
+    registerForm.resetFields();
+    setIsModalVisible(false);
+  };
+
+  const onRegisterFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
 
@@ -18,31 +72,41 @@ const LoginPage = () => {
     setIsModalVisible(true);
   };
 
-  const handleOk = () => {
+  const handleOk = (e) => {
+    registerForm.resetFields();
     setIsModalVisible(false);
   };
 
+
+  // When user click x or 遮罩层时触发
   const handleCancel = () => {
+    registerForm.resetFields();
     setIsModalVisible(false);
   };
 
   return (
-    <Card 
-        hoverable
-        className="loginForm">
+    <div className="login-container">
+        <div className="login-header-line">
+          <h2>Login</h2>
+        </div>
       <Form
-        name="basic"
+        className="login-form"
+        form={loginForm}
+        name="login"
         initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        onFinish={onLoginFinish}
+        onFinishFailed={onLoginFinishFailed}
         autoComplete="off"
       >
         <Form.Item
-          label="Username"
+          label="Email"
           name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[
+            { required: true, message: 'Please input your username!' 
+            }
+          ]}
         >
-          <Input />
+          <Input className="input-username" placeholder="Type in your email"/>
         </Form.Item>
 
         <Form.Item
@@ -50,28 +114,29 @@ const LoginPage = () => {
           name="password"
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input.Password />
+          <Input.Password className="input-password" placeholder="Type in your password"/>
         </Form.Item>
 
         <Form.Item name="remember" valuePropName="checked">
           <Checkbox>Remember me</Checkbox>
         </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Log in
-          </Button>
-          {' '}
-          <Button type="link" onClick={showModal}>
-            Register
-          </Button>
-        </Form.Item>
-      </Form>
+        <div className = "login-button-container">
+          <button className = "login-button" type="submit">
+          <h3>LOGIN</h3></button>
+        </div>
 
-      <Modal title="User Registration" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      </Form>
+      <div className = "register-button-container">
+          <div className = "register-button" type="link" onClick={showModal}>
+          <h6>Register</h6></div>
+        </div>
+      <Modal title="User Registration" open={isModalVisible} footer={null} onOk={handleOk} onCancel={handleCancel} >
         <Form
           name="register"
-          onFinish={onFinish}  // Assume the same onFinish function, adjust as necessary
+          form={registerForm}
+          onFinish={onRegisterFinish}  // Pass the validation
+          onFinishFailed={onRegisterFinishFailed}  // Didn't pass the validation
           layout="vertical"
         >
           <Form.Item label="First Name" name="firstName" rules={[{ required: true }]}>
@@ -86,7 +151,22 @@ const LoginPage = () => {
           <Form.Item label="Mobile" name="mobile" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
+          <Form.Item label="Email" name="email" 
+            rules={
+              [ 
+                 { validator: (_, value) => value ? 
+                   axios.get(`http://127.0.0.1:8083/users/search/${value}`).then(response=>{
+                    console.log(response);
+                      if (response.data === "") {
+                        return Promise.resolve();
+                      } else {
+                        return Promise.reject("This email has been registered");
+                      }
+                   })
+                 : Promise.reject("Email field cannot be empty")
+                 }
+              ]
+            }>
             <Input />
           </Form.Item>
           <Form.Item label="Password" name="password" rules={[{ required: true }]}>
@@ -98,9 +178,14 @@ const LoginPage = () => {
           <Form.Item label="Profile" name="profile">
             <Input.TextArea />
           </Form.Item>
+          <div className = "login-button-container">
+          <button className = "login-button" type="submit">
+          <h3>REGISTER</h3></button>
+        </div>
+            
         </Form>
       </Modal>
-    </Card>
+    </div>
   );
 };
 

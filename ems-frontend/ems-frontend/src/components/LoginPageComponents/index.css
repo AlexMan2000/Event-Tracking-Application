@@ -1,5 +1,100 @@
-.loginForm {
+.login-container {
     margin: 300px auto;
     height: 50%;
     width: 50%;
+    /* text-align: center; */
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    overflow:hidden;  /* 解决margin 塌陷问题 */
+}
+
+
+/* 
+    Margin 塌陷，父子元素margin-top取最大值 
+    解决: 父元素添加overflow: hidden 触发BFC
+
+    Margin 合并: 兄弟元素下边距和和上边距取最大值渲染
+    解决: 在其中一个元素外面套一层标签，设置外层标签的overflow: hidden触发BFC
+
+    BFC可以解决margin塌陷和合并问题但是不是唯一的解决方案
+*/
+
+.login-form {
+    margin: 0px auto;
+    padding: 30px;
+    /* border:1px solid; */
+    width: 100%;
+    height:100%;
+    box-sizing: border-box;
+}
+
+/* Clear default styles */
+h1,h2,h3,h4,h5,h6 {
+    margin:0px;
+}
+
+
+.login-header-line {
+    margin-top: 20px;
+    padding: 5px;
+    text-align: center;
+    font-size: 24px;
+}
+
+/* 用于父标签内的子标签剧中排列 */
+.login-button-container {
+    display:flex;
+    justify-content: center; /* horizontally */
+    align-items: center;  /* vertically */
+}
+
+.login-button {
+    padding: 20px 80px;
+    border-radius: 25px;
+    transition: background-color 0.3s ease;
+    background-color: rgb(6, 72, 87);
+    /* background-image: linear-gradient(to right, #00C9FF, #92FE9D, #00C9FF, #92FE9D) */
+}
+
+.login-button:hover {
+    background-color: rgb(9, 130, 157);
+}
+
+
+.register-button-container {
+    display:flex;
+    align-items: center;
+    justify-content: right;
+}
+
+.register-button {
+    /* margin-top: 20px; */
+    padding: 20px;
+    text-align: center;
+    color:rgb(15, 152, 236);
+}
+.register-button:hover {
+    color:rgb(149, 189, 213);
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+body {
+    /* Sets the background image */
+    background-image: url('../../assets/web-background.jpg');
+
+    /* Cover ensures the image covers the whole area, may stretch/distort the image */
+    background-size: cover;
+
+    /* No-repeat ensures the image does not tile */
+    background-repeat: no-repeat;
+
+    /* Center the background image */
+    background-position: center center;
+
+    /* Fixed positioning to prevent the image from scrolling with the page */
+    background-attachment: fixed;
+
+    /* Optional: adding a background color in case the image is not available */
+    background-color: #cccccc;
 }

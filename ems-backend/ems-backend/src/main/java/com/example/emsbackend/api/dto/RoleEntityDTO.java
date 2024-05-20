@@ -1,11 +1,9 @@
 package com.example.emsbackend.api.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import lombok.Data;
 
 import java.sql.Date;
-
+@Data
 public class RoleEntityDTO {
     private Long id;
     private String title;

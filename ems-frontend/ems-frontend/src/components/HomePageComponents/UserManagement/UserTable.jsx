@@ -125,7 +125,7 @@ const UserTable = () => {
     <ProTable
       columns={columns}
       request={async (params, sorter, filter) => {
-        // localhost doesn't support https request
+        // localhost doesn't support https request, use http instead
             const res = await axios.get('http://127.0.0.1:8083/users/all', {
               params: {
                 ...params,
