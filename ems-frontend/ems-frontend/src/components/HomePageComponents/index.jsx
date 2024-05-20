@@ -1,5 +1,6 @@
 import EventTrackingIndex from './EventTrackingManagement';
 import UserManagementIndex from './UserManagement';
+import ChattingRoomIndex from './ChattingRoom';
 import React, { useState } from 'react';
 
 import {
@@ -15,8 +16,10 @@ import {
   import { Layout, Menu, theme } from 'antd';
   const { Header, Content, Footer, Sider } = Layout;
 
-const pages = [<UserManagementIndex/>, <EventTrackingIndex/>, ...Array.from([1,2,3,4,5,6]).map((val, index, array) => `nav ${index}`)]
-const labels = ["User Management", "Event Tracking", ...Array.from([1,2,3,4,5,6]).map((val, index, array) => `nav ${index}`)]
+
+// Sub pages
+const pages = [<UserManagementIndex/>, <EventTrackingIndex/>, <ChattingRoomIndex/>, ...Array.from([1,2,3,4,5,6]).map((val, index, array) => `nav ${index}`)]
+const labels = ["User Management", "Event Tracking", "Chatting Room", ...Array.from([1,2,3,4,5,6]).map((val, index, array) => `nav ${index}`)]
 
 const items = [
   UserOutlined,
