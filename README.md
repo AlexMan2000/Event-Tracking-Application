@@ -7,11 +7,14 @@
 - 已跑通controller-service-dto流程
 - 已完成DagEntity的CRUD操作
 
-
-
 20240519: 搭建前端脚手架，测试前后端数据传递
 
+- 已能够通过axios访问后端controller
 
+20240520: 测试用户注册登录功能
+
+- 已完成用户注册功能
+- 已完成用户登录跳转页面
 
 
 ## Week 2
