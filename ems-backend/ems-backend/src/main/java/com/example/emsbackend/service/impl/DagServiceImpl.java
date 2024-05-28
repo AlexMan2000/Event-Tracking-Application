@@ -1,8 +1,8 @@
 package com.example.emsbackend.service.impl;
 
-import com.example.emsbackend.api.dto.DagEntityDTO;
-import com.example.emsbackend.persistence.entity.DagEntity;
-import com.example.emsbackend.persistence.repository.DagEntityRepository;
+import com.example.emsbackend.dto.DagEntityDTO;
+import com.example.emsbackend.entity.primary.DagEntity;
+import com.example.emsbackend.repository.primary.DagEntityRepository;
 import com.example.emsbackend.service.DagService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;

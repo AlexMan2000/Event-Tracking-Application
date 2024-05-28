@@ -1,6 +1,6 @@
 package com.example.emsbackend.service;
 
-import com.example.emsbackend.api.dto.RoleEntityDTO;
+import com.example.emsbackend.dto.RoleEntityDTO;
 
 public interface RoleService {
 

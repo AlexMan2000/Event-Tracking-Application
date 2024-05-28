@@ -1,8 +1,8 @@
 package com.example.emsbackend.service.impl;
 
-import com.example.emsbackend.api.dto.UserEntityDTO;
-import com.example.emsbackend.persistence.entity.UserEntity;
-import com.example.emsbackend.persistence.repository.UserEntityRepository;
+import com.example.emsbackend.dto.UserEntityDTO;
+import com.example.emsbackend.entity.primary.UserEntity;
+import com.example.emsbackend.repository.primary.UserEntityRepository;
 import com.example.emsbackend.service.LoginService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

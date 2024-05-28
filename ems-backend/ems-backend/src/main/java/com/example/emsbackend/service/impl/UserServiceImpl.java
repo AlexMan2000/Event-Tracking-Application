@@ -1,11 +1,11 @@
 package com.example.emsbackend.service.impl;
 
-import com.example.emsbackend.api.dto.RoleEntityDTO;
-import com.example.emsbackend.api.dto.UserEntityDTO;
-import com.example.emsbackend.model.userSearch.UserEntitySearchCriteria;
-import com.example.emsbackend.persistence.entity.UserEntity;
-import com.example.emsbackend.persistence.repository.UserEntityCriteriaRepository;
-import com.example.emsbackend.persistence.repository.UserEntityRepository;
+import com.example.emsbackend.dto.RoleEntityDTO;
+import com.example.emsbackend.dto.UserEntityDTO;
+import com.example.emsbackend.service.paging.UserEntitySearchCriteria;
+import com.example.emsbackend.entity.primary.UserEntity;
+import com.example.emsbackend.repository.primary.UserEntityCriteriaRepository;
+import com.example.emsbackend.repository.primary.UserEntityRepository;
 import com.example.emsbackend.service.RoleService;
 import com.example.emsbackend.service.UserService;
 import jakarta.transaction.Transactional;

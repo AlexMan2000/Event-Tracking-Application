@@ -69,6 +69,7 @@ function HomePage() {
             className={"main-layout"}
             style={{
             marginLeft: collapsed ? 80 : 200,
+            marginRight: 0
             }}
         >
             <Header

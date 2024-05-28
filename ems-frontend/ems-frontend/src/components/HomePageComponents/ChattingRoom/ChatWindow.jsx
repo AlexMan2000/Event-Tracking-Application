@@ -15,14 +15,14 @@ function ChatWindow() {
   const handleInputChange = (event) => {
     setInputMessage(event.target.value);
   };
-
+   
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       handleSendMessage();
     }
   };
 
-  return (
+  return ( 
     <div className="chat-window">
       <div className="message-list">
         {messages.map((message, index) => (

@@ -7,13 +7,14 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class EmsBackendApplication {
 
 
@@ -26,9 +27,6 @@ public class EmsBackendApplication {
 
 	@Bean
 	public AtomicLong getTimeCounter() { return new AtomicLong(); }
-
-//	@Bean
-//	public EntityManager getEntityManager() { return new HibernatePersistenceProvider().createContainerEntityManagerFactory(, new HashMap<>()).createEntityManager(); }
 
 	public static void main(String[] args) {
 		SpringApplication.run(EmsBackendApplication.class, args);

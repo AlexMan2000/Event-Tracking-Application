@@ -1,8 +1,8 @@
 package com.example.emsbackend.service.impl;
 
-import com.example.emsbackend.api.dto.RoleEntityDTO;
-import com.example.emsbackend.persistence.entity.RoleEntity;
-import com.example.emsbackend.persistence.repository.RoleEntityRepository;
+import com.example.emsbackend.dto.RoleEntityDTO;
+import com.example.emsbackend.entity.primary.RoleEntity;
+import com.example.emsbackend.repository.primary.RoleEntityRepository;
 import com.example.emsbackend.service.RoleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
