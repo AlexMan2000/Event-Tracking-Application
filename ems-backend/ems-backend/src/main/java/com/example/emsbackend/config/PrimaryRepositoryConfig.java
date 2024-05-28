@@ -9,6 +9,7 @@ import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -32,13 +33,13 @@ public class PrimaryRepositoryConfig {
 
     @Primary
     @Bean(name = "primaryEntityManagerFactory")
-    public EntityManagerFactory primaryEntityManagerFactory(
+    public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(
             EntityManagerFactoryBuilder builder, @Qualifier("primaryDataSource") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
                 .packages("com.example.emsbackend.entity.primary")  // package to scan for entities
                 .persistenceUnit("primary")
-                .build().getObject();
+                .build();
     }
 
     @Primary
