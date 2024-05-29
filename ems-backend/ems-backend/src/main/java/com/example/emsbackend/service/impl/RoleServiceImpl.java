@@ -1,6 +1,6 @@
 package com.example.emsbackend.service.impl;
 
-import com.example.emsbackend.dto.RoleEntityDTO;
+import com.example.emsbackend.dto.primary.RoleEntityDTO;
 import com.example.emsbackend.entity.primary.RoleEntity;
 import com.example.emsbackend.repository.primary.RoleEntityRepository;
 import com.example.emsbackend.service.RoleService;

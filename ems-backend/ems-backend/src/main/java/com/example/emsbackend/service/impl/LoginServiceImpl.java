@@ -1,6 +1,6 @@
 package com.example.emsbackend.service.impl;
 
-import com.example.emsbackend.dto.UserEntityDTO;
+import com.example.emsbackend.dto.primary.UserEntityDTO;
 import com.example.emsbackend.entity.primary.UserEntity;
 import com.example.emsbackend.repository.primary.UserEntityRepository;
 import com.example.emsbackend.service.LoginService;

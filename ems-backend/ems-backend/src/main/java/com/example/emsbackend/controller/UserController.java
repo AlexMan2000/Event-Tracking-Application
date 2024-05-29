@@ -1,6 +1,6 @@
 package com.example.emsbackend.controller;
 
-import com.example.emsbackend.dto.UserEntityDTO;
+import com.example.emsbackend.dto.primary.UserEntityDTO;
 import com.example.emsbackend.service.paging.UserEntitySearchCriteria;
 import com.example.emsbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

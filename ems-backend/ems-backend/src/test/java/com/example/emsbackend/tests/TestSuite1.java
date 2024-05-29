@@ -2,7 +2,7 @@ package com.example.emsbackend.tests;
 
 
 
-import com.example.emsbackend.dto.DagEntityDTO;
+import com.example.emsbackend.dto.primary.DagEntityDTO;
 import junit.framework.JUnit4TestAdapter;
 
 

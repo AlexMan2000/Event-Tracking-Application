@@ -1,6 +1,6 @@
 package com.example.emsbackend.service.impl;
 
-import com.example.emsbackend.dto.DagEntityDTO;
+import com.example.emsbackend.dto.primary.DagEntityDTO;
 import com.example.emsbackend.entity.primary.DagEntity;
 import com.example.emsbackend.repository.primary.DagEntityRepository;
 import com.example.emsbackend.service.DagService;

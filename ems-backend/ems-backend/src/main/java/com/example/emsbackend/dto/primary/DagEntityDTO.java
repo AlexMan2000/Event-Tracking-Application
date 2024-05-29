@@ -1,4 +1,4 @@
-package com.example.emsbackend.dto;
+package com.example.emsbackend.dto.primary;
 
 import lombok.Builder;
 import lombok.Data;

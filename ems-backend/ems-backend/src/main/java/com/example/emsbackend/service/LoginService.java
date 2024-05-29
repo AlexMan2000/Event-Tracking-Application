@@ -1,6 +1,6 @@
 package com.example.emsbackend.service;
 
-import com.example.emsbackend.dto.UserEntityDTO;
+import com.example.emsbackend.dto.primary.UserEntityDTO;
 
 
 public interface LoginService {

@@ -1,4 +1,4 @@
-package com.example.emsbackend.dto;
+package com.example.emsbackend.dto.primary;
 
 import jakarta.persistence.*;
 import lombok.Data;

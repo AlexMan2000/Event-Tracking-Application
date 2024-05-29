@@ -1,7 +1,7 @@
 package com.example.emsbackend.controller;
 
 
-import com.example.emsbackend.dto.DagEntityDTO;
+import com.example.emsbackend.dto.primary.DagEntityDTO;
 import com.example.emsbackend.service.impl.DagServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

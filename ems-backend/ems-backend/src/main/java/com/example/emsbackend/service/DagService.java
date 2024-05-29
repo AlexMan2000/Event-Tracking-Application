@@ -1,6 +1,6 @@
 package com.example.emsbackend.service;
 
-import com.example.emsbackend.dto.DagEntityDTO;
+import com.example.emsbackend.dto.primary.DagEntityDTO;
 
 import java.util.List;
 
