@@ -2,7 +2,6 @@ package com.example.emsbackend.entity.secondary;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
 
 import java.util.Date;
@@ -12,8 +11,6 @@ import java.util.Date;
 @Table(name = "event", schema = "event_management")
 public class EventEntity {
 
-    @Id
-    @jakarta.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -40,12 +37,6 @@ public class EventEntity {
     @Column(name = "trigger_times")
     private Long triggerTimes;
 
-    @Column(name = "project_info")
-    private String projectInfo;
-
-    @Column(name = "page_info")
-    private String pageInfo;
-
     @Column(name = "creator")
     private String creator;
 
@@ -57,12 +48,10 @@ public class EventEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date eventOfflineTime;
 
-    @Column(name = "extended_parameters")
-    private String extendedParameters;
-
     @Column(name = "sample_images")
     private String sampleImages;
 
+    @Id
     @Column(name = "identifier_code")
     private String identifierCode;
 

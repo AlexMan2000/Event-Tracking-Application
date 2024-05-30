@@ -1,7 +1,6 @@
 package com.example.emsbackend.entity.secondary;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 
@@ -9,9 +8,7 @@ import java.util.Date;
 @Data
 @Table(name = "parameter")
 public class ParameterEntity {
-
     @Id
-    @jakarta.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -32,8 +29,16 @@ public class ParameterEntity {
     @Column(name = "parameter_value")
     private String parameterValue;
 
+    @Column(name = "parameter_type")
+    private String parameterType;
+
     @Column(name = "creator")
     private String creator;
+
+    @Column(name = "identifier_code")
+    private String identifier_code;
+
+
 
     // Getters and Setters
 }

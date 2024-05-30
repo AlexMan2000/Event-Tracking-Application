@@ -3,7 +3,6 @@ package com.example.emsbackend.entity.secondary;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 
@@ -12,8 +11,6 @@ import java.util.Date;
 @Table(name = "page")
 public class PageEntity {
 
-    @Id
-    @jakarta.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -55,6 +52,7 @@ public class PageEntity {
     @Column(name = "sample_images")
     private String sampleImages;
 
+    @Id
     @Column(name = "identifier_code")
     private String identifierCode;
 

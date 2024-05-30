@@ -8,6 +8,6 @@ import java.util.List;
 
 
 @Repository
-public interface PageEntityRepository extends JpaRepository<PageEntity, Long> {
+public interface PageEntityRepository extends JpaRepository<PageEntity, String> {
 
 }

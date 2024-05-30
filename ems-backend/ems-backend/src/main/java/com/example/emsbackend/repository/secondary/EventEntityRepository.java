@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Repository
-public interface EventEntityRepository extends JpaRepository<EventEntity, Long> {
+public interface EventEntityRepository extends JpaRepository<EventEntity, String> {
 
-        EventEntity findEventEntityById(Long id);
+        EventEntity findEventEntityByIdentifierCode(String id);
 }

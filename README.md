@@ -21,4 +21,22 @@
 20240528: 设计埋点数据管理层
 
 - 创建多个数据源，用于不同服务对象
+- 设计事件对象状态机
+
+![image-20240529184758316](F:\Study_Notes_Backup\Full_Stack_Projects\Event-Tracking-Management-System\README.assets\image-20240529184758316.png)
+
+
+
+20240529：设计埋点数据层
+
+- 设计JPAEntityDTO之间的交互关系
+
+- 重构数据库，添加多对多映射
+
+  ![image-20240529230720531](F:\Study_Notes_Backup\Full_Stack_Projects\Event-Tracking-Management-System\README.assets\image-20240529230720531.png)
+
+- 编写后端接口, 尝试模仿https://help.aliyun.com/document_detail/252718.html?spm=a2c4g.252716.0.0.68201b146emhcr中的对象操作逻辑
+
+20240530: 编写前端页面测试后端功能
+
 - 
