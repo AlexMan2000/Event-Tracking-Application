@@ -2,9 +2,12 @@ package com.example.emsbackend.service;
 
 import com.example.emsbackend.dto.secondary.EventEntityDTO;
 import com.example.emsbackend.dto.secondary.ParameterEntityDTO;
+import com.example.emsbackend.entity.secondary.EventEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface EventService {
 
@@ -13,10 +16,9 @@ public interface EventService {
     Map<String, String> getEventParameters(String eventID);
 
 
-
     void createEvent(EventEntityDTO eventEntityDTO, List<String> parameterIds);
 
-
+    Optional<EventEntityDTO> getEventById(String eventId);
     /**
      * Manage the event, primarily the event status(in use, idle, deleted, completed)
      * @param newEventEntityDTO
@@ -27,6 +29,7 @@ public interface EventService {
 
     void deleteEventById(String eventId);
 
-
+    public EventEntityDTO convertEntityToDTO(EventEntity inputObj);
+    public EventEntity convertDTOToEntity(EventEntityDTO inputObj);
 
 }

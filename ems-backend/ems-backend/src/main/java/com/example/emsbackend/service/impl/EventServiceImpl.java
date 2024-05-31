@@ -1,7 +1,6 @@
 package com.example.emsbackend.service.impl;
 
 import com.example.emsbackend.dto.secondary.EventEntityDTO;
-import com.example.emsbackend.dto.secondary.ParameterEntityDTO;
 import com.example.emsbackend.entity.secondary.EventEntity;
 import com.example.emsbackend.entity.secondary.EventParameterEntity;
 import com.example.emsbackend.entity.secondary.ParameterEntity;
@@ -10,16 +9,12 @@ import com.example.emsbackend.repository.secondary.EventParameterId;
 import com.example.emsbackend.repository.secondary.EventParameterMappingRepository;
 import com.example.emsbackend.repository.secondary.ParameterEntityRepository;
 import com.example.emsbackend.service.EventService;
-import jdk.jfr.Event;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Condition;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -36,8 +31,6 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private ParameterEntityRepository parameterEntityRepository;
-
-
 
 
     /**
@@ -120,6 +113,8 @@ public class EventServiceImpl implements EventService {
     }
 
 
+
+    @Override
     public EventEntityDTO convertEntityToDTO(EventEntity inputObj) {
 
         Map<String, String> parameters = getEventParameters(inputObj.getIdentifierCode());
@@ -129,6 +124,7 @@ public class EventServiceImpl implements EventService {
         return entityDTO;
     }
 
+    @Override
     public EventEntity convertDTOToEntity(EventEntityDTO inputObj) {
         // By default, it will skip the field that exists in source but doesn't exist in destination
         return modelMapper.map(inputObj, EventEntity.class);

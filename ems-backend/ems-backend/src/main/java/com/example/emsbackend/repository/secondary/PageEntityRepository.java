@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface PageEntityRepository extends JpaRepository<PageEntity, String> {
 
+
+    PageEntity findPageEntitiesByIdentifierCode(String id);
 }
