@@ -17,11 +17,11 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<EventEntityDTO> getEventDTOById(@PathVariable String id) {
         Optional<EventEntityDTO> eventById = eventService.getEventById(id);
-        return eventById.isEmpty() ? ResponseEntity.notFound().build(): ResponseEntity.ok(eventById.get())
+        return eventById.isEmpty() ? ResponseEntity.notFound().build(): ResponseEntity.ok(eventById.get());
     }
 
 
