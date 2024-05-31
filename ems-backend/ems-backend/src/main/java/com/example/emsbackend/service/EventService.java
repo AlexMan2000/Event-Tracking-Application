@@ -1,6 +1,7 @@
 package com.example.emsbackend.service;
 
 import com.example.emsbackend.dto.secondary.EventEntityDTO;
+import com.example.emsbackend.dto.secondary.ParameterEntityDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ public interface EventService {
 
 
 
-    EventEntityDTO createEvent(EventEntityDTO eventEntityDTO);
+    void createEvent(EventEntityDTO eventEntityDTO, List<String> parameterIds);
 
 
     /**
@@ -21,10 +22,10 @@ public interface EventService {
      * @param newEventEntityDTO
      * @return
      */
-    EventEntityDTO updateEvent(EventEntityDTO newEventEntityDTO);
+    void updateEvent(EventEntityDTO newEventEntityDTO, List<String> parameterIds);
 
 
-    EventEntityDTO deleteEventById(String eventId);
+    void deleteEventById(String eventId);
 
 
 

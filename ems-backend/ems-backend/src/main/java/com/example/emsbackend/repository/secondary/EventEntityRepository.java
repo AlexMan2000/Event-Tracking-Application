@@ -11,4 +11,6 @@ import java.util.List;
 public interface EventEntityRepository extends JpaRepository<EventEntity, String> {
 
         EventEntity findEventEntityByIdentifierCode(String id);
+
+        void deleteEventEntitiesByIdentifierCode(String uid);
 }

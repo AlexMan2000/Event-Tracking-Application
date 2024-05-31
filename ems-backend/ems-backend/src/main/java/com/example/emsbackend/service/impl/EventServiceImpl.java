@@ -3,16 +3,30 @@ package com.example.emsbackend.service.impl;
 import com.example.emsbackend.dto.secondary.EventEntityDTO;
 import com.example.emsbackend.dto.secondary.ParameterEntityDTO;
 import com.example.emsbackend.entity.secondary.EventEntity;
+import com.example.emsbackend.entity.secondary.EventParameterEntity;
 import com.example.emsbackend.entity.secondary.ParameterEntity;
 import com.example.emsbackend.repository.secondary.EventEntityRepository;
+import com.example.emsbackend.repository.secondary.EventParameterId;
 import com.example.emsbackend.repository.secondary.EventParameterMappingRepository;
 import com.example.emsbackend.repository.secondary.ParameterEntityRepository;
 import com.example.emsbackend.service.EventService;
+import jdk.jfr.Event;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Condition;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
+
+@Service
 public class EventServiceImpl implements EventService {
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     private EventEntityRepository eventEntityRepository;
@@ -25,6 +39,7 @@ public class EventServiceImpl implements EventService {
 
 
 
+
     /**
      * Get the parameters of an event, including its extended parameter and the public parameters
      * @param eventID
@@ -34,7 +49,7 @@ public class EventServiceImpl implements EventService {
     public Map<String, String> getEventParameters(String eventID) {
         Map<String, String> res = new HashMap<>();
 
-        List<String> strings = eventParameterMappingRepository.findAllParameterEntitiesForEventById(eventID);
+        List<String> strings = getEventParameterIds(eventID);
 
         List<ParameterEntity> parameterEntities = strings.stream().map(elem -> parameterEntityRepository.findParameterEntitiesByIdentifier_code(elem)).toList();
 
@@ -45,38 +60,77 @@ public class EventServiceImpl implements EventService {
         return res;
     }
 
+    private List<String> getEventParameterIds(String eventID) {
+        return eventParameterMappingRepository.findAllParameterEntitiesForEventById(eventID);
+    }
 
-    public EventEntityDTO getEventById(String eventId) {
+    @Transactional(readOnly = true)
+    public Optional<EventEntityDTO> getEventById(String eventId) {
         EventEntity eventEntity = eventEntityRepository.findEventEntityByIdentifierCode(eventId);
-        Map<String, String> eventParameters = getEventParameters(eventId);
-
-
-
-
+        if (eventEntity == null) {
+            return Optional.empty();
+        }
+        return Optional.of(convertEntityToDTO(eventEntity));
     }
 
+
+    /**
+     * Create an event, with a list of parameters id specified, assuming that the parameter has already been created
+     * @param eventEntityDTO the eventObj from the frontend
+     * @param parameterIds the list of parameter_ids from frontend
+     * @return
+     */
+    @Transactional
     @Override
-    public EventEntityDTO createEvent(EventEntityDTO eventEntityDTO) {
-        return null;
+    public void createEvent(EventEntityDTO eventEntityDTO, List<String> parameterIds) {
+
+        EventEntity eventEntity = convertDTOToEntity(eventEntityDTO);
+        eventEntityRepository.save(eventEntity);
+        String identifierCode = eventEntity.getIdentifierCode();
+        for (String parameterId: parameterIds) {
+            EventParameterId epeId = new EventParameterId(identifierCode, parameterId);
+            EventParameterEntity epe = new EventParameterEntity(epeId);
+            eventParameterMappingRepository.save(epe);
+        }
     }
 
+    @Transactional
     @Override
-    public EventEntityDTO updateEvent(EventEntityDTO newEventEntityDTO) {
-        return null;
+    public void updateEvent(EventEntityDTO newEventEntityDTO, List<String> parameterIds) {
+
+        String eventId = newEventEntityDTO.getIdentifierCode();
+        List<String> parametersOri = getEventParameterIds(eventId);
+        List<String> deletedParameterIds = parametersOri.stream().filter(elem -> !parameterIds.contains(elem)).toList();
+        List<String> addedParameterIds = parameterIds.stream().filter(elem -> !parametersOri.contains(elem)).toList();
+
+        eventParameterMappingRepository.deleteAllByListOfParameters(eventId, deletedParameterIds);
+        try {
+            addedParameterIds.forEach(elem -> {
+                eventParameterMappingRepository.insertAllByListOfParameters(eventId, elem);
+            });
+        } catch (Exception e) {
+            throw new RuntimeException("Insertion Error");
+        }
     }
 
+    @Transactional
     @Override
-    public EventEntityDTO deleteEventById(String eventId) {
-        return null;
+    public void deleteEventById(String eventId) {
+        eventEntityRepository.deleteEventEntitiesByIdentifierCode(eventId);
     }
 
 
     public EventEntityDTO convertEntityToDTO(EventEntity inputObj) {
+
         Map<String, String> parameters = getEventParameters(inputObj.getIdentifierCode());
-        return null;
+        EventEntityDTO entityDTO = modelMapper.map(inputObj, EventEntityDTO.class);
+        entityDTO.setParameters(parameters);
+
+        return entityDTO;
     }
 
     public EventEntity convertDTOToEntity(EventEntityDTO inputObj) {
-        return null;
+        // By default, it will skip the field that exists in source but doesn't exist in destination
+        return modelMapper.map(inputObj, EventEntity.class);
     }
 }

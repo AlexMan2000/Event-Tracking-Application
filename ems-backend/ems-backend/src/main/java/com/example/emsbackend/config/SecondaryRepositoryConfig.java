@@ -33,8 +33,8 @@ public class SecondaryRepositoryConfig {
 
     @Bean(name = "secondaryEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean secondaryEntityManagerFactory(
-            EntityManagerFactoryBuilder builder, @Qualifier("secondaryDataSource") DataSource dataSource) {
-        return builder
+            EntityManagerFactoryBuilder builderFactory, @Qualifier("secondaryDataSource") DataSource dataSource) {
+        return builderFactory
                 .dataSource(dataSource)
                 .packages("com.example.emsbackend.entity.secondary")  // package to scan for entities
                 .persistenceUnit("secondary")

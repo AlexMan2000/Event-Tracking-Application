@@ -8,7 +8,7 @@ import java.util.Map;
 @Data
 public class EventEntityDTO {
 
-    private Map<String, String> attributes;
+    private Map<String, String> parameters; // Used for backend -> frontend
     private Date gmtCreate;
     private Date gmtModify;
     private String eventName;

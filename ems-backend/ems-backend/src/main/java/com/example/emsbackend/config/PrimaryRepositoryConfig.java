@@ -31,11 +31,20 @@ public class PrimaryRepositoryConfig {
         return DataSourceBuilder.create().build();
     }
 
+
+    /**
+     *
+     * @param builderFactory
+     * @param dataSource
+     * @return
+     *
+     * 建造者模式和工厂模式混合
+     */
     @Primary
     @Bean(name = "primaryEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(
-            EntityManagerFactoryBuilder builder, @Qualifier("primaryDataSource") DataSource dataSource) {
-        return builder
+            EntityManagerFactoryBuilder builderFactory, @Qualifier("primaryDataSource") DataSource dataSource) {
+        return builderFactory
                 .dataSource(dataSource)
                 .packages("com.example.emsbackend.entity.primary")  // package to scan for entities
                 .persistenceUnit("primary")

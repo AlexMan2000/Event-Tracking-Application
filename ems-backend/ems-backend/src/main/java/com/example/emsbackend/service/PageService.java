@@ -1,6 +1,7 @@
 package com.example.emsbackend.service;
 
 import com.example.emsbackend.dto.secondary.EventEntityDTO;
+import com.example.emsbackend.dto.secondary.ProjectEntityDTO;
 
 import java.util.List;
 
@@ -21,5 +22,15 @@ public interface PageService {
      * @return
      */
     List<EventEntityDTO> getEventByStatusOfPageById(String pageID, String eventStatus);
+
+
+    /**
+     * Get all the projects that contain the page with pageID
+     * @param pageID
+     * @return
+     */
+    List<ProjectEntityDTO> getProjectEntityForPageByPageId(String pageID);
+
+
 
 }

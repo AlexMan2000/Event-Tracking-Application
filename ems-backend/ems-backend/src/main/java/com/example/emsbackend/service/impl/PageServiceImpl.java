@@ -2,6 +2,7 @@ package com.example.emsbackend.service.impl;
 
 import com.example.emsbackend.dto.secondary.EventEntityDTO;
 import com.example.emsbackend.dto.secondary.PageEntityDTO;
+import com.example.emsbackend.dto.secondary.ProjectEntityDTO;
 import com.example.emsbackend.entity.secondary.PageEntity;
 import com.example.emsbackend.service.PageService;
 
@@ -15,6 +16,11 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public List<EventEntityDTO> getEventByStatusOfPageById(String pageID, String eventStatus) {
+        return null;
+    }
+
+    @Override
+    public List<ProjectEntityDTO> getProjectEntityForPageByPageId(String pageID) {
         return null;
     }
 
