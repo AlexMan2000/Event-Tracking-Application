@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @Table(name = "event", schema = "event_management")
 public class EventEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @org.springframework.data.annotation.Id
     private Long id;
     @Column(name = "gmt_create")
     @Temporal(TemporalType.TIMESTAMP)

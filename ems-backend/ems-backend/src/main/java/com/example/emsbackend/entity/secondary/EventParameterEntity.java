@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity(name="EventParameterEntity")
 @Table(name="event_parameter")
 public class EventParameterEntity {
 

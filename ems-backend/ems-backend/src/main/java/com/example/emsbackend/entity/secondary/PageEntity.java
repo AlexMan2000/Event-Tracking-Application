@@ -10,8 +10,7 @@ import java.util.Date;
 @Entity
 @Table(name = "page")
 public class PageEntity {
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @org.springframework.data.annotation.Id
     private Long id;
 
     @Column(name = "gmt_create")

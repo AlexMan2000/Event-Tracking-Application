@@ -1,7 +1,7 @@
 package com.example.emsbackend.repository.primary;
 
 
-import com.example.emsbackend.service.paging.UserEntitySearchCriteria;
+import com.example.emsbackend.service.utils.UserEntitySearchCriteria;
 import com.example.emsbackend.entity.primary.UserEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

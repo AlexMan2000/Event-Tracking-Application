@@ -21,16 +21,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ModelMapper modelMapper;
 
-
-    @Autowired
-    private ProjectService projectService;
-
     @Autowired
     private ProjectEntityRepository projectEntityRepository;
-
-
-    @Autowired
-    private PageService pageService;
 
 
     @Autowired
@@ -51,7 +43,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<PageEntityDTO> getAllPagesOfProjectByID(String projectID) {
         return projectPageMappingRepository.getAllPagesOfProjectByID(projectID).stream()
-                .map(elem -> pageService.convertEntityToDTO(elem))
+                .map(elem -> this.modelMapper.map(elem, PageEntityDTO.class))
                 .toList();
     }
 

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,8 +17,10 @@ public interface EventParameterMappingRepository extends JpaRepository<EventPara
     @Query(value="SELECT event_id FROM event_parameter WHERE parameter_id = ?1", nativeQuery = true)
     List<String> findAllEventEntitiesForParaById(String paraID);
 
+
+    @Transactional
     @Modifying
-    @Query("DELETE FROM EventParameterEntity ep WHERE ep.id.eventId = :eventId AND ep.id.paramterId IN :parameterIds")
+    @Query("DELETE FROM EventParameterEntity ep WHERE ep.id.eventId = :eventId AND ep.id.parameterId IN :parameterIds")
     void deleteAllByListOfParameters(@Param("eventId") String eventId, @Param("parameterIds") List<String> parameterMappingToDelete);
 
     @Modifying

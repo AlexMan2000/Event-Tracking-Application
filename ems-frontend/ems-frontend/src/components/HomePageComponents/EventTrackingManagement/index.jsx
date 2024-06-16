@@ -1,9 +1,12 @@
 import React from 'react'
+import EventTable from './EventTable';
 
-function EventTrackingIndex() {
+function EventManagementIndex() {
   return (
-    <EventTable/>
+    <>
+      <EventTable/>
+    </>
   )
 }
 
-export default EventTrackingIndex
+export default EventManagementIndex;

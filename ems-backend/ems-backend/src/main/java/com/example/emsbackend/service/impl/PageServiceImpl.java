@@ -3,7 +3,6 @@ package com.example.emsbackend.service.impl;
 import com.example.emsbackend.dto.secondary.EventEntityDTO;
 import com.example.emsbackend.dto.secondary.PageEntityDTO;
 import com.example.emsbackend.dto.secondary.ProjectEntityDTO;
-import com.example.emsbackend.entity.secondary.EventEntity;
 import com.example.emsbackend.entity.secondary.PageEntity;
 import com.example.emsbackend.repository.secondary.EventPageMappingRepository;
 import com.example.emsbackend.repository.secondary.PageEntityRepository;
@@ -27,11 +26,6 @@ public class PageServiceImpl implements PageService {
     @Autowired
     private EventService eventService;
 
-    @Autowired
-    private ProjectService projectService;
-
-    @Autowired
-    private PageService pageService;
     @Autowired
     private EventPageMappingRepository eventPageMappingRepository;
 
@@ -78,7 +72,7 @@ public class PageServiceImpl implements PageService {
     @Override
     public List<ProjectEntityDTO> getProjectEntityForPageByPageId(String pageID) {
         return projectPageMappingRepository.getAllProjectsWithPageByID(pageID).stream()
-                .map(elem -> projectService.convertEntityToDTO(elem))
+                .map(elem -> this.modelMapper.map(elem, ProjectEntityDTO.class))
                 .toList();
     }
 

@@ -34,7 +34,7 @@ public class ParameterServiceImpl implements ParameterService {
     private EventParameterMappingRepository eventParameterMappingRepository;
 
     public ParameterEntityDTO getParameterById(String parameterId) {
-        ParameterEntity parameterEntity = parameterEntityRepository.findParameterEntitiesByIdentifier_code(parameterId);
+        ParameterEntity parameterEntity = parameterEntityRepository.findParameterEntityByIdentifierCode(parameterId);
 
         return modelMapper.map(parameterEntity, ParameterEntityDTO.class);
     }

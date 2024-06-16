@@ -2,7 +2,7 @@ package com.example.emsbackend.service.impl;
 
 import com.example.emsbackend.dto.primary.RoleEntityDTO;
 import com.example.emsbackend.dto.primary.UserEntityDTO;
-import com.example.emsbackend.service.paging.UserEntitySearchCriteria;
+import com.example.emsbackend.service.utils.UserEntitySearchCriteria;
 import com.example.emsbackend.entity.primary.UserEntity;
 import com.example.emsbackend.repository.primary.UserEntityCriteriaRepository;
 import com.example.emsbackend.repository.primary.UserEntityRepository;

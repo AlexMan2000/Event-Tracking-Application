@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -44,13 +45,18 @@ public class EventServiceImpl implements EventService {
 
         List<String> strings = getEventParameterIds(eventID);
 
-        List<ParameterEntity> parameterEntities = strings.stream().map(elem -> parameterEntityRepository.findParameterEntitiesByIdentifier_code(elem)).toList();
+        List<ParameterEntity> parameterEntities = strings.stream().map(elem -> parameterEntityRepository.findParameterEntityByIdentifierCode(elem)).toList();
 
         for (ParameterEntity parameterEntity: parameterEntities) {
             res.put(parameterEntity.getParameterName(), parameterEntity.getParameterValue());
         }
 
         return res;
+    }
+
+    @Override
+    public List<EventEntityDTO> getAllEvents() {
+        return eventEntityRepository.findAll().stream().map(this::convertEntityToDTO).collect(Collectors.toList());
     }
 
     private List<String> getEventParameterIds(String eventID) {

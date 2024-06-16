@@ -1,4 +1,4 @@
-package com.example.emsbackend.service.paging;
+package com.example.emsbackend.service.utils;
 
 import org.springframework.data.domain.Sort;
 

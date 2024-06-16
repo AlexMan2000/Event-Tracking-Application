@@ -1,0 +1,17 @@
+.section-divider {
+    font-size: 15px;
+    /* font-family: "SimHei"; */
+    font-weight: bold;
+    color:grey;
+    margin:15px 15px 15px 0px;
+}
+
+
+.sidebar {
+    float:right;
+    margin:5%;
+}
+
+.sidebar:focus {
+    cursor:pointer;
+}

@@ -16,6 +16,8 @@ public interface EventService {
     Map<String, String> getEventParameters(String eventID);
 
 
+    List<EventEntityDTO> getAllEvents();
+
     void createEvent(EventEntityDTO eventEntityDTO, List<String> parameterIds);
 
     Optional<EventEntityDTO> getEventById(String eventId);
