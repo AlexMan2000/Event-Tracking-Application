@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "event", schema = "event_management")
+@Table(name = "event", schema = "event-management")
 public class EventEntity {
     @org.springframework.data.annotation.Id
     private Long id;

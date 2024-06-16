@@ -209,7 +209,9 @@ export default function EventTable() {
       title: '事件状态',
       dataIndex: 'eventStatus',
       key: 'eventStatus',
-      render: (_, { tags }) => (
+      render: (_, { tags }) => {
+        console.log(tags);
+        return (
         <>
           {tags.map((tag) => {
             return (
@@ -219,7 +221,7 @@ export default function EventTable() {
             );
           })}
         </>
-      ),
+      )},
     },
     {
       title: '事件图片',
@@ -301,13 +303,13 @@ export default function EventTable() {
   );
 
 
-  const handleDropdownContent = () => {
-    axios.get("'http://127.0.0.1:8083/events/all'").then(response=>{
-      console.log(response.data);
-      const temp = response.data.map(elem => {return {"id":elem.id, "label":elem.parameterName}});
-      console.log(temp);
-      setParameters(temp);
-    })
+  const handleDropdownContent = async () => {
+    console.log("haha");
+    const response = await axios.get("'http://127.0.0.1:8083/events/all'");
+    console.log(response.data);
+    const temp = response.data.map(elem => {return {"id":elem.id, "label":elem.parameterName}});
+    console.log(temp);
+    setParameters(temp);
   }
 
   return (
@@ -316,7 +318,7 @@ export default function EventTable() {
         columns={columns}
         request={async (params, sorter, filter) => {
           // localhost doesn't support https request, use http instead
-              const res = await axios.get('http://127.0.0.1:8083/users/all', {
+              const res = await axios.get('http://127.0.0.1:8083/events/all', {
                 params: {
                   ...params,
                   sorter: sorter && Object.keys(sorter).length ? sorter : null,

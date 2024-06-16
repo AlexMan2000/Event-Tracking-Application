@@ -56,7 +56,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventEntityDTO> getAllEvents() {
-        return eventEntityRepository.findAll().stream().map(this::convertEntityToDTO).collect(Collectors.toList());
+        System.out.println(eventEntityRepository.findAllEvents());
+        return eventEntityRepository.findAllEvents().stream().map(this::convertEntityToDTO).collect(Collectors.toList());
     }
 
     private List<String> getEventParameterIds(String eventID) {

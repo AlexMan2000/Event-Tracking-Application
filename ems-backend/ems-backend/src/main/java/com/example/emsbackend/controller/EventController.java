@@ -41,8 +41,6 @@ public class EventController {
     }
 
 
-
-
     /**
      * 创建新的事件
      * @param eventEntityDTO
