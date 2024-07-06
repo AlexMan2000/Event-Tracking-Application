@@ -1,6 +1,9 @@
 import UserManagementIndex from './UserManagement';
 import EventManagementIndex from './EventTrackingManagement';
 import ChattingRoomIndex from './ChattingRoom';
+import PhotoSharingPage from './PhotoSharing';
+import ParameterManagementIndex from './ParameterManagement';
+import TestForm from './TestForm';
 import React, { useState } from 'react';
 
 import {
@@ -15,38 +18,51 @@ import {
   } from '@ant-design/icons';
   import { Layout, Menu, theme } from 'antd';
 
+
   const { Header, Content, Footer, Sider } = Layout;
-
-
-// Sub pages
-const pages = [<UserManagementIndex/>, <EventManagementIndex/>, <ChattingRoomIndex/>, ...Array.from([1,2,3,4,5,6]).map((val, index, array) => `nav ${index}`)]
-const labels = ["User Management", "Event Management", "Chatting Room", ...Array.from([1,2,3,4,5,6]).map((val, index, array) => `nav ${index}`)]
-
-const items = [
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  AppstoreOutlined,
-  TeamOutlined,
-  ShopOutlined,
-].map((icon, index) => ({
-  key: String(index + 1),
-  icon: React.createElement(icon),
-  label: labels[index]
-}));
-
 
 function HomePage() {
 
     const {
         token: { colorBgContainer, borderRadiusLG },
-      } = theme.useToken();
+    } = theme.useToken();
+
+    const [collapsed, setCollapse] = useState(false);
+    const [menuIndex, setMenuIndex] = useState("1");
+
+
+    // Sub pages
+    const pages = [<UserManagementIndex/>,
+         <EventManagementIndex setMenuIndex={setMenuIndex}/>,
+          <ParameterManagementIndex/>,
+          <ChattingRoomIndex/>,  
+          <PhotoSharingPage/>,
+          <TestForm/>
+        ]
+    const labels = ["User Management",
+         "Event Management", 
+         "Parameter Management",
+          "Chatting Room",
+          "Photo Sharing",
+          "Test Form"
+          ]
+
+    const items = [
+    UserOutlined,
+    VideoCameraOutlined,
+    UploadOutlined,
+    BarChartOutlined,
+    CloudOutlined,
+    AppstoreOutlined,
+    // TeamOutlined,
+    // ShopOutlined,
+    ].map((icon, index) => ({
     
-      const [collapsed, setCollapse] = useState(false);
-      const [menuIndex, setMenuIndex] = useState("1");
-    
+    key: String(index + 1),
+    icon: React.createElement(icon),
+    label: labels[index]
+    }));
+
 
     return (<Layout hasSider>
         <Sider
@@ -62,7 +78,7 @@ function HomePage() {
             collapsible
             onCollapse={setCollapse.bind(this)}
         >
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={[menuIndex]} items={items}
+            <Menu theme="dark" mode="inline" selectedKeys = {[menuIndex]} defaultSelectedKeys={[menuIndex]} items={items}
             onSelect={({key, keyPath, selectedKeys, domEvent}) => {setMenuIndex(key)}}
             />
         </Sider>

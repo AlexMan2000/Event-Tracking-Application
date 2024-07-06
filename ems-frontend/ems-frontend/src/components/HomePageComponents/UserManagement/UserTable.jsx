@@ -142,7 +142,7 @@ const UserTable = () => {
         }}
       rowKey="id"
       dateFormatter="string"
-      headerTitle="User Management"
+      headerTitle="用户管理"
       toolBarRender={() => [
         <Button key="button" icon={<PlusOutlined />} type="primary" onClick={() => handleAdd()}>
           New User

@@ -1,10 +1,12 @@
 import React from 'react'
 import EventTable from './EventTable';
 
-function EventManagementIndex() {
+function EventManagementIndex(props) {
+
+  const {setMenuIndex} = props;
   return (
     <>
-      <EventTable/>
+      <EventTable setMenuIndex={setMenuIndex}/>
     </>
   )
 }

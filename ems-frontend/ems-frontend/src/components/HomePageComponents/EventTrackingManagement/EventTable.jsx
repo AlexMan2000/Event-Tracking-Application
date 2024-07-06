@@ -1,165 +1,148 @@
-import React, {useState} from 'react'
-import {Tag} from 'antd'
+import React, {useState, useRef, useEffect} from 'react'
 import axios from 'axios';
 import ProTable from '@ant-design/pro-table';
-import {Button, Modal, Form, Switch, Select, Input, Table, Menu, Dropdown} from "antd";
+import {Tag, notification, Space, Button, Modal, Form, Upload, Switch, Select, Input, Table, Menu, Dropdown} from "antd";
 import {PlusOutlined, DownOutlined} from "@ant-design/icons";
 import "./EventTable.css"
 
 
 
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === 'checkbox' ? <Checkbox /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-          valuePropName={inputType === 'checkbox' ? 'checked' : 'value'}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
+export default function EventTable(props) {
 
 
-
-export default function EventTable() {
-
-
+  // Event related
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalMode, setModalMode] = useState(0);
+  const {setMenuIndex} = props;
+  const [eventTypes, setEventTypes] = useState([]);
+  const [eventStatus, setEventStatus] = useState([]);
 
 
-  // const [form] = Form.useForm();
-  const [data, setData] = useState([]);
-  const [editingKey, setEditingKey] = useState('');
+  const [formCreateEvent] = Form.useForm();
+  const [selectedEventType, setSelectedEventType] = useState(null);
+  
+  const [formCreateParameter] = Form.useForm();
+  const [createEventParameterTableData, setCreateEventParameterTableData] = useState([]);
 
 
-  // Add Parameters
+  const proTableRef = useRef();
+  const hideModal = () => { setModalVisible(false)};
 
-  const edit = () => {
-    form.setFieldsValue({ ...record });
-    setEditingKey(record.key);
-  };
+  const handleEventTypeDropdownRender = async () => {
+    const res = await axios.get("http://127.0.0.1:8083/events/allTypes");
+    const tempData = res.data.length !=0 ? res.data.map((elem)=> ({"label":elem, "value":elem})):[];
+    const finalData = [{"label": "+ 添加新事件类型", "value": "newValue"}, ...tempData]
+    setEventTypes(finalData);
+  }
 
-  const cancel = () => {
-    setEditingKey('');
-  };
+  const handleEventTypeDropDownClick = (value) => {
+     if (value === "newValue") {
+        
+     }
+  }
 
-  const save = async (key) => {
-    try {
-      const row = await form.validateFields();
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
 
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setData(newData);
-        setEditingKey('');
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey('');
-      }
-    } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
-    }
-  };
 
-  const columnsParameter = [
+
+  const handleEventStatusDropdownRender = async () => {
+    const res = await axios.get("http://127.0.0.1:8083/events/allStatus");
+    const tempData = res.data.length !=0 ? res.data.map((elem)=> ({"label":elem, "value":elem})):[];
+    const finalData = [{"label": "+ 新建事件状态", "value": "newValue"}, ...tempData]
+    setEventStatus(finalData);
+  }
+
+  const handleEventStatusDropDownClick = (value) => {
+    console.log(value);
+  }
+
+
+  // Form submission
+  const onFormCreateEventFinish = async (values) => {
+    const postData = {
+      ...values,
+      "parameterIds": createEventParameterTableData.map(elem=>elem.identifierCode)
+    };
+     console.log(postData);
+
+     let res = null;
+     if (modalMode === 1) {
+      // Update
+      res = await axios.put("http://127.0.0.1:8083/events/update", postData)
+     } else {
+      // Create
+      res = await axios.post("http://127.0.0.1:8083/events/add", postData)
+     }
+
+
+     if (res.status == 200) {
+      setModalVisible(false);
+      proTableRef.current.reload();
+      console.log(res.status);
+      console.log("haha");
+     } else {
+      console.log("error");
+     }
+  }
+
+
+  const onFormCreateEventOk = () => {
+    formCreateEvent.resetFields();
+    setCreateEventParameterTableData([]);
+    hideModal();
+  }
+
+  const onFormCreateEventCancel = () => {
+    formCreateEvent.resetFields();
+    setCreateEventParameterTableData([]);
+    hideModal();
+  }
+
+
+
+
+  const modalColumnsParameter = [
     {
       title: '属性ID',
-      dataIndex: 'key',
-      editable: true,
+      dataIndex: 'identifierCode',
+      key: 'identifierCode',
     },
     {
       title: '属性名称',
-      dataIndex: 'name',
-      editable: true,
+      dataIndex: 'parameterName',
+      key: 'parameterName',
     },
     {
       title: '属性值类型',
-      dataIndex: 'valueType',
-      editable: true,
-    },
-    {
-      title: '是否必填',
-      dataIndex: 'isRequired',
-      editable: true,
-      inputType: 'checkbox',
+      dataIndex: 'parameterType',
+      key: 'parameterType',
     },
     {
       title: '操作',
       dataIndex: 'operation',
       render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
+        return (
           <span>
-            <a onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-              保存
+            <a onClick={() => removeFromList(record.identifierCode)} style={{ marginRight: 8 }}>
+              移除
             </a>
-            <a onClick={cancel}>取消</a>
           </span>
-        ) : (
-          <a disabled={editingKey !== ''} onClick={() => edit(record)}>
-            编辑
-          </a>
-        );
+        )
       },
     },
   ];
 
 
-  const mergedColumns = columnsParameter.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.inputType || 'text',
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
-
-
-
-  // Add Events
+  // ProTable Add Events
   const textToColorStatus = {
-    "In Use": "green",
-    "Idle": "red",
-    "Deleted": "grey",
+    "已上线": "green",
+    "未上线": "red",
+    "已删除": "grey",
   }
 
-  const columns = [
+  const proTableColumnsEvent = [
     {
-      title: '事件ID',
-      dataIndex: 'identifierCode',
+      title: '事件编码',
+      dataIndex: 'id',
       key: 'id',
       valueType: 'text',
     },
@@ -167,6 +150,12 @@ export default function EventTable() {
       title: '事件名称',
       dataIndex: 'eventName',
       key: 'eventName',
+      valueType: 'text',
+    },
+    {
+      title: '事件创建者',
+      dataIndex: 'creator',
+      key: 'creator',
       valueType: 'text',
     },
     {
@@ -206,21 +195,20 @@ export default function EventTable() {
       valueType: 'text',
     },
     {
+      title: '事件触发次数',
+      dataIndex: 'triggerTimes',
+      key: 'triggerTimes',
+      valueType: 'text',
+    },
+    {
       title: '事件状态',
       dataIndex: 'eventStatus',
       key: 'eventStatus',
-      render: (_, { tags }) => {
-        console.log(tags);
+      render: (_, {eventStatus}) => {
         return (
-        <>
-          {tags.map((tag) => {
-            return (
-              <Tag color={textToColorStatus[tag]} key={tag}>
-                {tag}
-              </Tag>
-            );
-          })}
-        </>
+            <Tag color={textToColorStatus[eventStatus]} key={eventStatus}>
+              {eventStatus}
+            </Tag>
       )},
     },
     {
@@ -229,73 +217,61 @@ export default function EventTable() {
       key: 'sampleImages',
       valueType: 'image',
     },
+    {
+      title: '操作',
+      key: 'eventOperation',
+      render: (_, record) => {
+        return (<Space size="middle">
+          <a key ={`eventEditing+${record.identifierCode}`} onClick={() => {handleEditableRowModal(record.identifierCode)}}>
+            编辑
+          </a>
+        </Space>)
+      }
+    }
   ];
 
 
-  const handleAdd = async (fields) => {
-    try {
-      const result = await axios.post('/api/users', fields);
-      if (result.status === 200) {
-        message.success('Added successfully');
-        return true;
+  // Table Edit
+  const handleEditableRowModal = async (id) => {
+    
+
+    const eventRes = await axios.get(`http://127.0.0.1:8083/events/${id}`);
+  
+    const eventFieldData = eventRes.data
+    console.log(eventFieldData)
+    const eventParameterFieldData = eventFieldData.parameterObjs;
+    formCreateEvent.setFieldsValue(
+      {
+        "id":eventFieldData["id"],
+        "eventName":eventFieldData["eventName"],
+        "eventType":eventFieldData["eventType"],
+        "eventDesc":eventFieldData["eventDesc"],
+        "eventStatus":eventFieldData["eventStatus"],
+        "gmtCreate":eventFieldData["gmtCreate"],
+        "gmtModify":eventFieldData["gmtCreate"],
+        "triggerTimes":eventFieldData["triggerTimes"],
+        "creator":eventFieldData["creator"],
+        "eventOnlineTime":eventFieldData["eventOnlineTime"],
+        "eventOfflineTime": eventFieldData["eventOfflineTime"],
+        "identifierCode":eventFieldData["identifierCode"],
+        "sampleImages":eventFieldData["sampleImages"]
       }
-      throw new Error('Error');
-    } catch (error) {
-      message.error('Adding failed, please try again!');
-      return false;
-    }
-  };
-
-  const handleUpdate = async (fields, id) => {
-    try {
-      const result = await axios.put(`/api/users/${id}`, fields);
-      if (result.status === 200) {
-        message.success('Update successful');
-        return true;
-      }
-      throw new Error('Error');
-    } catch (error) {
-      message.error('Update failed, please try again!');
-      return false;
-    }
-  };
-
-  const handleRemove = async (fields, id) => {
-    try {
-      const result = await axios.put(`/api/users/${id}`, fields);
-      if (result.status === 200) {
-        message.success('Update successful');
-        return true;
-      }
-      throw new Error('Error');
-    } catch (error) {
-      message.error('Update failed, please try again!');
-      return false;
-    }
-  };
-
-
-  const hideModal = () => { setModalVisible(false)};
-
-  const onModalFinish = (values) => {
-    console.log(values);
+    );
+    setCreateEventParameterTableData(eventParameterFieldData);
+    setModalMode(1); // Indicating editing
+    setModalVisible(true);
   }
 
 
 
   // Dropdown menu
-
-
-  const [parameters, setParameters] = useState([
-    { id: 'param1', label: 'Parameter 1' },
-    { id: 'param2', label: 'Parameter 2' },
-    { id: 'param3', label: 'Parameter 3' },
-  ]);
+  const [parameters, setParameters] = useState([]);
+  const [api, contextHolder] =  notification.useNotification();
 
   const menu = (
     <Menu>
       {parameters.map((param) => (
-        <Menu.Item key={param.id} onClick={()=>{console.log(`haha+${param.id}`)}}>
+        <Menu.Item key={param.id} onClick={() => {handleDropDownParameterClick(param.id)}}>
           {param.label}
         </Menu.Item>
       ))}
@@ -303,19 +279,50 @@ export default function EventTable() {
   );
 
 
+  const handleDropDownParameterClick = async (id) => {
+    const res = await axios.get(`http://127.0.0.1:8083/parameters/${id}`);
+    const elem = res.data;
+    const tempData = res.data !== null ? {"identifierCode": elem.identifierCode
+      , "parameterName": elem.parameterName
+      , "parameterType":elem.parameterType, }: null;
+
+
+    if (createEventParameterTableData.filter(elem => elem.identifierCode===id).length != 0) {
+      notification.open({
+        message: 'Notification Title',
+        description:
+          'Have added it before, cannot add the same parameter twice',
+        duration: 0,
+        placement: "topLeft"
+      })
+      return;
+    }
+    let finalData = [...createEventParameterTableData];
+    if (tempData != null) {
+      finalData = [...finalData, tempData];
+    }
+    setCreateEventParameterTableData(finalData);
+  }
+
+
+  // 已被管理的属性列表
   const handleDropdownContent = async () => {
-    console.log("haha");
-    const response = await axios.get("'http://127.0.0.1:8083/events/all'");
-    console.log(response.data);
-    const temp = response.data.map(elem => {return {"id":elem.id, "label":elem.parameterName}});
-    console.log(temp);
+    const response = await axios.get("http://127.0.0.1:8083/parameters/allname");
+    const temp = response.data.map(elem => {return {"id":elem, "label":elem}});
     setParameters(temp);
   }
+  
+  const removeFromList = (id) => {
+    const finalData = createEventParameterTableData.filter(elem => elem.identifierCode!==id);
+    setCreateEventParameterTableData(finalData);
+  }
+
+
 
   return (
     <>
       <ProTable
-        columns={columns}
+        columns={proTableColumnsEvent}
         request={async (params, sorter, filter) => {
           // localhost doesn't support https request, use http instead
               const res = await axios.get('http://127.0.0.1:8083/events/all', {
@@ -324,71 +331,208 @@ export default function EventTable() {
                   sorter: sorter && Object.keys(sorter).length ? sorter : null,
                   filter,
                 },
-              });
-              console.log(res.data);
+              });           
+              const finalData = res.data.length != 0 ? res.data.filter(elem=>elem.eventStatus !== "Deleted") :[]; 
+
               return {
-                data: res.data.length != 0 ? res.data: [],
+                data: finalData,
                 success: true,
                 total: parseInt(res.headers['x-total-count'], 10),
               };
           }}
+        actionRef = {proTableRef}
         rowKey="id"
         dateFormatter="string"
-        headerTitle="Event Management"
+        headerTitle="事件管理"
         toolBarRender={() => [
-          <Button key="buttonEvent" icon={<PlusOutlined />} type="primary" onClick={() => { setModalVisible(true)}}>
+          <Button key="buttonEvent" icon={<PlusOutlined />} type="primary" onClick={() => { setModalMode(0);setModalVisible(true)}}>
             新增事件
           </Button>,
         ]}
-        editable={{
-          onSave: handleUpdate,
-          onDelete: handleRemove,
-        }}
       />
       <Modal
-        title="新增页面事件"
+        title={modalMode === 1? "编辑页面事件": "新增页面事件"}
         visible={modalVisible}
-        onOk={hideModal}
-        onCancel={hideModal}
+        onOk={onFormCreateEventOk}
+        onCancel={onFormCreateEventCancel}
         footer={[
-          <Button key="back" onClick={hideModal}>
+          <Button key="back" onClick={onFormCreateEventCancel}>
             取消
           </Button>,
-          <Button key="submit" type="primary" onClick={() => form.submit()}>
-            保存
+          <Button key="submit" type="primary" onClick={() => formCreateEvent.submit()}>
+            {modalMode === 1? "提交更改": "创建"}
           </Button>,
         ]}
       >
         <Form
+          form= {formCreateEvent}
+          // ref = {formCreateEventRef}
           layout="vertical"
-          onFinish={onModalFinish}
+          onFinish={onFormCreateEventFinish}
           initialValues={{ active: true }}
         >
         <div className={"section-divider"}>
           1.请设置基本信息
         </div>
           <Form.Item 
-            name="事件名称" 
+            name="eventName" 
             label="事件名称" 
             rules={[{ required: true, message: '请输入事件名称'}]}>
              <Input />
           </Form.Item>
+          {modalMode === 1 ? 
+          
+            (
+              <>
+                <Form.Item 
+                  name="identifierCode" 
+                  label="事件ID" 
+                  >
+                  <Input disabled={true}></Input>
+                </Form.Item>
+                <Form.Item 
+                  name="id" 
+                  label="事件PK" 
+                  style={{display:'none'}}
+                  >
+                  <Input disabled={true}></Input>
+                </Form.Item>
+                <Form.Item 
+                  name="gmtCreate" 
+                  label="事件创建时间" 
+                  style={{display:'none'}}
+                  >
+                  <Input></Input>
+                </Form.Item>
+                <Form.Item
+                  name="gmtModify" 
+                  label="最近修改时间" 
+                  style={{display:'none'}}
+                  >
+                  <Input></Input>
+                </Form.Item>
+                <Form.Item 
+                  name="eventOnlineTime" 
+                  label="事件上线时间" 
+                  style={{display:'none'}}
+                  >
+                  <Input></Input>
+                </Form.Item>
+                <Form.Item 
+                  name="eventOfflineTime" 
+                  label="事件下线时间" 
+                  style={{display:'none'}}
+                  >
+                  <Input></Input>
+                </Form.Item>
+                <Form.Item 
+                  name="triggerTimes" 
+                  label="事件触发次数" 
+                  style={{display:'none'}}
+                  >
+                  <Input></Input>
+                </Form.Item>
+                <Form.Item 
+                  name="creator" 
+                  label="事件创建人" 
+                  style={{display:'none'}}
+                  >
+                  <Input></Input>
+                </Form.Item>
+                <Form.Item 
+                  name="sampleImages" 
+                  label="事件图片" 
+                  style={{display:'none'}}
+                  >
+                  <Input></Input>
+                </Form.Item>
+              </>
+            )
+          :null}
           <Form.Item 
-            name="事件类型" 
+            name="eventType" 
             label="事件类型"
             rules={[{ required: true, message: '请输入事件类型'}]}>
-            <Input/>
+            <Select
+               showSearch
+               onClick={handleEventTypeDropdownRender}
+               onChange={handleEventTypeDropDownClick}
+               placeholder={"Search to Select"}
+               options={eventTypes}
+               value={selectedEventType}
+            />
           </Form.Item>
           <Form.Item 
-            name="事件描述" 
-            label="事件描述">
-            <Input/>
+            name="eventStatus" 
+            label="事件状态"
+            rules={[{ required: true, message: '请选择事件状态'}]}>
+            <Select
+               showSearch
+               onClick={handleEventStatusDropdownRender}
+               onChange={handleEventStatusDropDownClick}
+               placeholder={"Search to Select"}
+               options={eventStatus}
+            />
           </Form.Item>
+          <Form.Item 
+            name="eventDesc" 
+            label="事件描述">
+            <Input.TextArea/>
+          </Form.Item>
+          {/* <Form.Item 
+            name="sampleImages" 
+            label="事件图片">
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              // showUploadList={false}
+            >
+              <Button
+                style={{
+                  border: 0,
+                  background: 'none',
+                }}
+                // type="button"
+              >
+                <PlusOutlined />
+                <div
+                  style={{
+                    marginTop: 8,
+                  }}
+                >
+                  Upload
+                </div>
+              </Button>
+            </Upload>
+          </Form.Item> */}
+          {/* {modalMode == 1? 
+            <>
+                <Form.Item 
+                  name="gmt" 
+                  label="事件描述">
+                  <Input.TextArea/>
+                </Form.Item>
+                <Form.Item 
+                  name="eventDesc" 
+                  label="事件描述">
+                  <Input.TextArea/>
+                </Form.Item>
+                <Form.Item 
+                  name="eventDesc" 
+                  label="事件描述">
+                  <Input.TextArea/>
+                </Form.Item>
+            </>: null
+          } */}
         </Form>
         <div className={"section-divider"}>
           2.请设置事件属性
         </div>
-        <Form  component={false}>
+        <Form 
+          form={formCreateParameter} 
+          // ref={formCreateParameterRef}
+          component={false}>
           <Dropdown overlay = {menu} placement="bottomLeft" trigger={["click"]}>
             <Button
               onClick={handleDropdownContent}
@@ -398,19 +542,17 @@ export default function EventTable() {
               <PlusOutlined /> 添加新属性
             </Button>
           </Dropdown>
+          <Button
+              onClick={()=>{setMenuIndex('3')}}
+              type="primary"
+              style={{ marginBottom: 16, marginLeft:5}}
+            >
+              <PlusOutlined /> 属性管理
+            </Button>
           <Table
-            components={{
-              body: {
-                cell: EditableCell,
-              },
-            }}
             bordered
-            dataSource={data}
-            columns={mergedColumns}
-            rowClassName="editable-row"
-            pagination={{
-              onChange: cancel,
-            }}
+            dataSource={createEventParameterTableData}
+            columns={modalColumnsParameter}
           />
         </Form>
 
