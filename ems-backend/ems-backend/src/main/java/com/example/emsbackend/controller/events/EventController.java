@@ -59,18 +59,7 @@ public class EventController {
     }
 
 
-//    @GetMapping("/all")
-//    public ResponseEntity<List<EventEntityDTO>> getAllEvents() {
-//        return ResponseEntity.ok(eventService.getAllEvents());
-//    }
-
-
     @PostMapping("/add")
-    /**
-     * 创建新的事件
-     * @param eventEntityDTO
-     * @return
-     */
     public ResponseEntity<EventEntityDTO> createNewEvent(@RequestBody EventEntityDTO eventEntityDTO) {
         // Need to modify later
         initializeNewEvent(eventEntityDTO);
@@ -100,14 +89,12 @@ public class EventController {
      */
     @PutMapping("/update")
     public ResponseEntity<String> updateEvent(@RequestBody EventEntityDTO newEventEntityDTO) {
-        System.out.println(newEventEntityDTO);
         Optional<EventEntityDTO> originalEventObj = eventService.getEventById(newEventEntityDTO.getIdentifierCode());
         if (originalEventObj.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         EventEntityDTO originalEventEntityDTOTemp = originalEventObj.get();
-
 
         Date nowTimeStamp = new Date();
         String eventStatusBefore = originalEventEntityDTOTemp.getEventStatus();
@@ -121,7 +108,6 @@ public class EventController {
         }
 
         newEventEntityDTO.setGmtModify(nowTimeStamp);
-        System.out.println(newEventEntityDTO);
         Message status = eventService.updateEvent(newEventEntityDTO);
         if (status.getStatusCode().equals(StatusCode.UPDATE_FAILURE)) {
             return ResponseEntity.internalServerError().build();

@@ -122,6 +122,7 @@ public class EventServiceImpl implements EventService {
     @Transactional
     @Override
     public Message createEvent(EventEntityDTO eventEntityDTO) {
+
         List<String> parameterIds = eventEntityDTO.getParameterIds();
         EventEntity eventEntity = convertDTOToEntity(eventEntityDTO);
         try {
