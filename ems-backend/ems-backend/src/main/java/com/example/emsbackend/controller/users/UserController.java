@@ -1,7 +1,7 @@
 package com.example.emsbackend.controller.users;
 
 import com.example.emsbackend.dto.users.UserEntityDTO;
-import com.example.emsbackend.criteria_utils.searching.impl.UserEntitySearchCriteria;
+import com.example.emsbackend.criteria_utils.searching.UserEntitySearchCriteria;
 import com.example.emsbackend.service.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

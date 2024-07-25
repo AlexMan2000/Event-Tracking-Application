@@ -1,23 +1,23 @@
 package com.example.emsbackend.service.events;
 
-import com.example.emsbackend.dto.events.PageEntityDTO;
-import com.example.emsbackend.dto.events.ProjectEntityDTO;
-import com.example.emsbackend.entity.events.ProjectEntity;
+import com.example.emsbackend.commons.status.Message;
+import com.example.emsbackend.criteria_utils.searching.SearchCriteria;
+import com.example.emsbackend.dto.events.getDTO.GetIdentifiersDTO;
+import com.example.emsbackend.dto.events.getDTO.ProjectEntityGetObjectDTO;
+import com.example.emsbackend.dto.events.modifyDTO.ProjectEntityUpdateObjectDTO;
 
 import java.util.List;
 
 public interface ProjectService {
 
-    /**
-     * Get all the pages that belong to the project by projectID
-     * @param projectID
-     * @return
-     */
-    List<PageEntityDTO> getAllPagesOfProjectByID(String projectID);
+    List<ProjectEntityGetObjectDTO> getAllProjects();
 
+    List<ProjectEntityGetObjectDTO> getAllProjectsFiltered(SearchCriteria searchCriteria);
 
-    ProjectEntityDTO convertEntityToDTO(ProjectEntity inputObj);
+    List<GetIdentifiersDTO> getAllMetaData();
 
-    ProjectEntity convertDTOToEntity(ProjectEntityDTO inputObj);
+    Message createProject(ProjectEntityUpdateObjectDTO projectEntityUpdateObjectDTO);
+
+    Message updateProjectById(Long projectId, ProjectEntityUpdateObjectDTO projectEntityUpdateObjectDTO);
 
 }

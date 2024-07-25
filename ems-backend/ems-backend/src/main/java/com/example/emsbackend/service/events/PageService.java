@@ -1,22 +1,22 @@
 package com.example.emsbackend.service.events;
 
-import com.example.emsbackend.dto.events.EventEntityDTO;
-import com.example.emsbackend.dto.events.PageEntityDTO;
-import com.example.emsbackend.dto.events.ProjectEntityDTO;
-import com.example.emsbackend.entity.events.PageEntity;
+import com.example.emsbackend.dto.events.entityDTO.EventEntityDTO;
+import com.example.emsbackend.dto.events.entityDTO.PageEntityDTO;
+import com.example.emsbackend.dto.events.getDTO.ProjectEntityGetObjectDTO;
+import com.example.emsbackend.entity.events.entityEntity.PageEntity;
 
 import java.util.List;
 
 public interface PageService {
 
-    PageEntityDTO getPageEntityDTOById(String pageID);
+    PageEntityDTO getPageEntityDTOById(Long pageID);
     void createOrUpdatePage(PageEntityDTO pageEntityDTO);
     /**
      * Get all the events with (eventType) of the page specified by pageID
      * @param pageID
      * @return
      */
-    List<EventEntityDTO> getEventByTypeOfPageById(String pageID, String eventType);
+    List<EventEntityDTO> getEventByTypeOfPageById(Long pageID, String eventType);
 
 
     /**
@@ -24,7 +24,7 @@ public interface PageService {
      * @param pageID
      * @return
      */
-    List<EventEntityDTO> getEventByStatusOfPageById(String pageID, String eventStatus);
+    List<EventEntityDTO> getEventByStatusOfPageById(Long pageID, String eventStatus);
 
 
     /**
@@ -32,7 +32,7 @@ public interface PageService {
      * @param pageID
      * @return
      */
-    List<ProjectEntityDTO> getProjectEntityForPageByPageId(String pageID);
+    List<ProjectEntityGetObjectDTO> getProjectEntityForPageByPageId(Long pageID);
 
 
     PageEntityDTO convertEntityToDTO(PageEntity inputObj);

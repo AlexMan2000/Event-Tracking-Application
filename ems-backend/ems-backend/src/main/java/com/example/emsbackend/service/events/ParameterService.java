@@ -1,11 +1,12 @@
 package com.example.emsbackend.service.events;
 
-import com.example.emsbackend.criteria_utils.searching.impl.ParameterEntitySearchCriteria;
-import com.example.emsbackend.dto.events.EventEntityDTO;
-import com.example.emsbackend.dto.events.ParameterEntityDTO;
+import com.example.emsbackend.criteria_utils.searching.ParameterEntitySearchCriteria;
+import com.example.emsbackend.dto.events.entityDTO.EventEntityDTO;
+import com.example.emsbackend.dto.events.entityDTO.ParameterEntityDTO;
 
 
 import java.util.List;
+import java.util.Map;
 
 public interface ParameterService {
 
@@ -14,11 +15,19 @@ public interface ParameterService {
 
     List<String> getAllParameterIdentifiers();
 
+    List<Long> getAllParameterIds();
+
+    /**
+     * Get the necessary information for dropdown menu for event parameter management
+     * @return List of parameter information in the format [(id_1, identifier_code_1), (id_2, identifier_code_2), ...]
+     */
+    List<Map<String, String>> getDropdownInformation();
+
 
     List<ParameterEntityDTO> getAllParametersFiltered(ParameterEntitySearchCriteria searchCriteria);
 
 
-    ParameterEntityDTO getParameterById(String id);
+    ParameterEntityDTO getParameterById(Long id);
 
 
     default void createParameters(List<ParameterEntityDTO> parameterEntityDTOList) {
@@ -27,7 +36,7 @@ public interface ParameterService {
         }
     }
 
-    List<EventEntityDTO> getEventForParameterByPID(String eventID);
+    List<EventEntityDTO> getEventEntityDTOListByParameterID(Long eventID);
 
 
     /**
@@ -36,6 +45,6 @@ public interface ParameterService {
      * @param
      * @return
      */
-    Boolean validateParameterValue(String inputValue, String parameterID);
+    Boolean validateParameterValue(String inputValue, Long parameterID);
 
 }

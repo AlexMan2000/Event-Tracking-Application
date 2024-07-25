@@ -3,8 +3,8 @@ package com.example.emsbackend.controller.events;
 
 import com.example.emsbackend.commons.enums.StatusCode;
 import com.example.emsbackend.commons.status.Message;
-import com.example.emsbackend.criteria_utils.searching.impl.EventEntitySearchCriteria;
-import com.example.emsbackend.dto.events.EventEntityDTO;
+import com.example.emsbackend.criteria_utils.searching.EventEntitySearchCriteria;
+import com.example.emsbackend.dto.events.entityDTO.EventEntityDTO;
 import com.example.emsbackend.service.events.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class EventController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventEntityDTO> getEventDTOById(@PathVariable String id) {
+    public ResponseEntity<EventEntityDTO> getEventDTOById(@PathVariable Long id) {
         Optional<EventEntityDTO> eventById = eventService.getEventById(id);
         return eventById.isEmpty() ? ResponseEntity.notFound().build(): ResponseEntity.ok(eventById.get());
     }
@@ -89,7 +89,7 @@ public class EventController {
      */
     @PutMapping("/update")
     public ResponseEntity<String> updateEvent(@RequestBody EventEntityDTO newEventEntityDTO) {
-        Optional<EventEntityDTO> originalEventObj = eventService.getEventById(newEventEntityDTO.getIdentifierCode());
+        Optional<EventEntityDTO> originalEventObj = eventService.getEventById(newEventEntityDTO.getId());
         if (originalEventObj.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

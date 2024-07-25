@@ -22,6 +22,21 @@ public class WebConfig implements WebMvcConfigurer {
 ```
 
 
+## 配置多个数据源
 
 
+
+
+
+
+## Java常用类
+### Optional<T>
+`Optional<?>` 可以和`orElse()`一起使用
+```java
+List<ParameterEntity> parameterEntities = strings.stream()
+        .map(elem -> parameterEntityRepository.findById(elem))
+        .map(elem -> elem.orElse(null))
+        .filter(Objects::nonNull)
+        .toList();
+```
 

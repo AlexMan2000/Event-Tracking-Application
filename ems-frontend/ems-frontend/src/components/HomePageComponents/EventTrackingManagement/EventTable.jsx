@@ -60,7 +60,7 @@ export default function EventTable(props) {
   const onFormCreateEventFinish = async (values) => {
     const postData = {
       ...values,
-      "parameterIds": createEventParameterTableData.map(elem=>elem.identifierCode)
+      "parameterIds": createEventParameterTableData.map(elem=>elem.id)
     };
      console.log(postData);
 
@@ -103,8 +103,8 @@ export default function EventTable(props) {
   const modalColumnsParameter = [
     {
       title: '属性ID',
-      dataIndex: 'identifierCode',
-      key: 'identifierCode',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
       title: '属性名称',
@@ -122,7 +122,7 @@ export default function EventTable(props) {
       render: (_, record) => {
         return (
           <span>
-            <a onClick={() => removeFromList(record.identifierCode)} style={{ marginRight: 8 }}>
+            <a onClick={() => removeFromList(record.id)} style={{ marginRight: 8 }}>
               移除
             </a>
           </span>
@@ -141,7 +141,7 @@ export default function EventTable(props) {
 
   const proTableColumnsEvent = [
     {
-      title: '事件编码',
+      title: '事件ID',
       dataIndex: 'id',
       key: 'id',
       valueType: 'text',
@@ -222,7 +222,7 @@ export default function EventTable(props) {
       key: 'eventOperation',
       render: (_, record) => {
         return (<Space size="middle">
-          <a key ={`eventEditing+${record.identifierCode}`} onClick={() => {handleEditableRowModal(record.identifierCode)}}>
+          <a key ={`eventEditing+${record.identifierCode}`} onClick={() => {handleEditableRowModal(record.id)}}>
             编辑
           </a>
         </Space>)
@@ -268,6 +268,8 @@ export default function EventTable(props) {
   const [parameters, setParameters] = useState([]);
   const [api, contextHolder] =  notification.useNotification();
 
+
+  console.log(parameters);
   const menu = (
     <Menu>
       {parameters.map((param) => (
@@ -280,14 +282,16 @@ export default function EventTable(props) {
 
 
   const handleDropDownParameterClick = async (id) => {
+    console.log(id);
     const res = await axios.get(`http://127.0.0.1:8083/parameters/${id}`);
+    
     const elem = res.data;
-    const tempData = res.data !== null ? {"identifierCode": elem.identifierCode
+    const tempData = res.data !== null ? {"id": elem.id
       , "parameterName": elem.parameterName
       , "parameterType":elem.parameterType, }: null;
 
 
-    if (createEventParameterTableData.filter(elem => elem.identifierCode===id).length != 0) {
+    if (createEventParameterTableData.filter(elem => elem.id===id).length != 0) {
       notification.open({
         message: 'Notification Title',
         description:
@@ -307,13 +311,14 @@ export default function EventTable(props) {
 
   // 已被管理的属性列表
   const handleDropdownContent = async () => {
-    const response = await axios.get("http://127.0.0.1:8083/parameters/allname");
-    const temp = response.data.map(elem => {return {"id":elem, "label":elem}});
+    const response = await axios.get("http://127.0.0.1:8083/parameters/getdropdown");
+    console.log(response);
+    const temp = response.data.map(elem => {return {"id":parseInt(elem.id), "label":elem.identifierCode}});
     setParameters(temp);
   }
   
   const removeFromList = (id) => {
-    const finalData = createEventParameterTableData.filter(elem => elem.identifierCode!==id);
+    const finalData = createEventParameterTableData.filter(elem => elem.id!==id);
     setCreateEventParameterTableData(finalData);
   }
 
@@ -386,14 +391,15 @@ export default function EventTable(props) {
               <>
                 <Form.Item 
                   name="identifierCode" 
-                  label="事件ID" 
+                  label="事件编码" 
+                  style={{display:'none'}}
                   >
                   <Input disabled={true}></Input>
                 </Form.Item>
                 <Form.Item 
                   name="id" 
-                  label="事件PK" 
-                  style={{display:'none'}}
+                  label="事件ID" 
+                  // style={{display:'none'}}
                   >
                   <Input disabled={true}></Input>
                 </Form.Item>
@@ -479,52 +485,6 @@ export default function EventTable(props) {
             label="事件描述">
             <Input.TextArea/>
           </Form.Item>
-          {/* <Form.Item 
-            name="sampleImages" 
-            label="事件图片">
-            <Upload
-              name="avatar"
-              listType="picture-card"
-              className="avatar-uploader"
-              // showUploadList={false}
-            >
-              <Button
-                style={{
-                  border: 0,
-                  background: 'none',
-                }}
-                // type="button"
-              >
-                <PlusOutlined />
-                <div
-                  style={{
-                    marginTop: 8,
-                  }}
-                >
-                  Upload
-                </div>
-              </Button>
-            </Upload>
-          </Form.Item> */}
-          {/* {modalMode == 1? 
-            <>
-                <Form.Item 
-                  name="gmt" 
-                  label="事件描述">
-                  <Input.TextArea/>
-                </Form.Item>
-                <Form.Item 
-                  name="eventDesc" 
-                  label="事件描述">
-                  <Input.TextArea/>
-                </Form.Item>
-                <Form.Item 
-                  name="eventDesc" 
-                  label="事件描述">
-                  <Input.TextArea/>
-                </Form.Item>
-            </>: null
-          } */}
         </Form>
         <div className={"section-divider"}>
           2.请设置事件属性

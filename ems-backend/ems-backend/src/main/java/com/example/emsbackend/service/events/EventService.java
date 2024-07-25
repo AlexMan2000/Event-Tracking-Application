@@ -1,10 +1,10 @@
 package com.example.emsbackend.service.events;
 
 import com.example.emsbackend.commons.status.Message;
-import com.example.emsbackend.dto.events.EventEntityDTO;
-import com.example.emsbackend.dto.events.ParameterEntityDTO;
-import com.example.emsbackend.entity.events.EventEntity;
-import com.example.emsbackend.criteria_utils.searching.impl.EventEntitySearchCriteria;
+import com.example.emsbackend.dto.events.entityDTO.EventEntityDTO;
+import com.example.emsbackend.dto.events.entityDTO.ParameterEntityDTO;
+import com.example.emsbackend.entity.events.entityEntity.EventEntity;
+import com.example.emsbackend.criteria_utils.searching.EventEntitySearchCriteria;
 
 import java.util.List;
 import java.util.Map;
@@ -14,10 +14,10 @@ public interface EventService {
 
 
     // Get a list of parameters to a given event
-    Map<String, String> getEventParameters(String eventID);
+    Map<String, String> getEventParameters(Long eventID);
 
 
-    List<ParameterEntityDTO> getEventParametersDTO(String eventID);
+    List<ParameterEntityDTO> getEventParametersDTO(Long eventID);
 
 
     List<EventEntityDTO> getAllEvents();
@@ -27,7 +27,7 @@ public interface EventService {
 
     Message createEvent(EventEntityDTO eventEntityDTO);
 
-    Optional<EventEntityDTO> getEventById(String eventId);
+    Optional<EventEntityDTO> getEventById(Long eventId);
     /**
      * Manage the event, primarily the event status(in use, idle, deleted, completed)
      * @param newEventEntityDTO
@@ -35,7 +35,7 @@ public interface EventService {
      */
     Message updateEvent(EventEntityDTO newEventEntityDTO);
 
-    public EventEntityDTO convertEntityToDTO(EventEntity inputObj);
-    public EventEntity convertDTOToEntity(EventEntityDTO inputObj);
+    EventEntityDTO convertEntityToDTO(EventEntity inputObj);
+    EventEntity convertDTOToEntity(EventEntityDTO inputObj);
 
 }

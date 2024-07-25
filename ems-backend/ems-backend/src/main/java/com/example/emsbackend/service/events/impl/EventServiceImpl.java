@@ -3,17 +3,17 @@ package com.example.emsbackend.service.events.impl;
 import com.example.emsbackend.commons.enums.StatusCode;
 import com.example.emsbackend.commons.status.Message;
 import com.example.emsbackend.criteria_utils.searching.impl.EventEntitySearchImpl;
-import com.example.emsbackend.dto.events.EventEntityDTO;
-import com.example.emsbackend.dto.events.ParameterEntityDTO;
-import com.example.emsbackend.entity.events.EventEntity;
-import com.example.emsbackend.entity.events.EventParameterEntity;
-import com.example.emsbackend.entity.events.ParameterEntity;
-import com.example.emsbackend.repository.events.EventEntityRepository;
-import com.example.emsbackend.repository.events.EventParameterId;
-import com.example.emsbackend.repository.events.EventParameterMappingRepository;
-import com.example.emsbackend.repository.events.ParameterEntityRepository;
+import com.example.emsbackend.dto.events.entityDTO.EventEntityDTO;
+import com.example.emsbackend.dto.events.entityDTO.ParameterEntityDTO;
+import com.example.emsbackend.entity.events.entityEntity.EventEntity;
+import com.example.emsbackend.entity.events.mappingEntity.EventParameterEntity;
+import com.example.emsbackend.entity.events.entityEntity.ParameterEntity;
+import com.example.emsbackend.repository.events.entityRepository.EventEntityRepository;
+import com.example.emsbackend.repository.events.compositeId.EventParameterId;
+import com.example.emsbackend.repository.events.mappingRepository.EventParameterMappingRepository;
+import com.example.emsbackend.repository.events.entityRepository.ParameterEntityRepository;
 import com.example.emsbackend.service.events.EventService;
-import com.example.emsbackend.criteria_utils.searching.impl.EventEntitySearchCriteria;
+import com.example.emsbackend.criteria_utils.searching.EventEntitySearchCriteria;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,12 +48,16 @@ public class EventServiceImpl implements EventService {
      * @return
      */
     @Override
-    public Map<String, String> getEventParameters(String eventID) {
+    public Map<String, String> getEventParameters(Long eventID) {
         Map<String, String> res = new HashMap<>();
 
-        List<String> strings = getEventParameterIds(eventID);
+        List<Long> strings = getEventParameterIds(eventID);
 
-        List<ParameterEntity> parameterEntities = strings.stream().map(elem -> parameterEntityRepository.findParameterEntityByIdentifierCode(elem)).toList();
+        List<ParameterEntity> parameterEntities = strings.stream()
+                .map(elem -> parameterEntityRepository.findById(elem))
+                .map(elem -> elem.orElse(null))
+                .filter(Objects::nonNull)
+                .toList();
 
         for (ParameterEntity parameterEntity: parameterEntities) {
             res.put(parameterEntity.getParameterName(), parameterEntity.getParameterValue());
@@ -63,10 +67,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ParameterEntityDTO> getEventParametersDTO(String eventID) {
-        List<String> strings = getEventParameterIds(eventID);
+    public List<ParameterEntityDTO> getEventParametersDTO(Long eventID) {
+        List<Long> strings = getEventParameterIds(eventID);
 
-        List<ParameterEntity> parameterEntities = strings.stream().map(elem -> parameterEntityRepository.findParameterEntityByIdentifierCode(elem)).toList();
+
+        List<ParameterEntity> parameterEntities = strings.stream()
+                .map(elem -> parameterEntityRepository.findById(elem))
+                .map(elem -> elem.orElse(null))
+                .filter(Objects::nonNull)
+                .toList();
 
         return parameterEntities.stream().map(elem -> this.modelMapper.map(elem, ParameterEntityDTO.class)).collect(Collectors.toList());
     }
@@ -97,17 +106,17 @@ public class EventServiceImpl implements EventService {
      * @param eventID
      * @return A list of parameter ids
      */
-    private List<String> getEventParameterIds(String eventID) {
+    private List<Long> getEventParameterIds(Long eventID) {
         return eventParameterMappingRepository.findAllParameterEntitiesForEventById(eventID);
     }
 
     @Transactional(readOnly = true)
-    public Optional<EventEntityDTO> getEventById(String eventId) {
-        EventEntity eventEntity = eventEntityRepository.findEventEntityByIdentifierCode(eventId);
-        if (eventEntity == null) {
+    public Optional<EventEntityDTO> getEventById(Long eventId) {
+        Optional<EventEntity> eventEntity = eventEntityRepository.findById(eventId);
+        if (eventEntity.isEmpty()) {
             return Optional.empty();
         }
-        EventEntityDTO dtoObj = convertEntityToDTO(eventEntity);
+        EventEntityDTO dtoObj = convertEntityToDTO(eventEntity.get());
         dtoObj.setParameterIds(getEventParameterIds(eventId));
         dtoObj.setParameterObjs(getEventParametersDTO(eventId));
         return Optional.of(dtoObj);
@@ -123,13 +132,13 @@ public class EventServiceImpl implements EventService {
     @Override
     public Message createEvent(EventEntityDTO eventEntityDTO) {
 
-        List<String> parameterIds = eventEntityDTO.getParameterIds();
+        List<Long> parameterIds = eventEntityDTO.getParameterIds();
         EventEntity eventEntity = convertDTOToEntity(eventEntityDTO);
         try {
             eventEntityRepository.save(eventEntity);
-            String identifierCode = eventEntity.getIdentifierCode();
-            for (String parameterId: parameterIds) {
-                EventParameterId epeId = new EventParameterId(identifierCode, parameterId);
+            Long eventId = eventEntity.getId();
+            for (Long parameterId: parameterIds) {
+                EventParameterId epeId = new EventParameterId(eventId, parameterId);
                 EventParameterEntity epe = new EventParameterEntity(epeId);
 
                 System.out.println(epe);
@@ -147,11 +156,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public Message updateEvent(EventEntityDTO newEventEntityDTO) {
 
-        String eventId = newEventEntityDTO.getIdentifierCode();
-        List<String> parameterIdsBefore = getEventParameterIds(eventId);
-        List<String> parameterIdsAfter = newEventEntityDTO.getParameterIds();
-        List<String> deletedParameterIds = parameterIdsBefore.stream().filter(elem -> !parameterIdsAfter.contains(elem)).toList();
-        List<String> addedParameterIds = parameterIdsAfter.stream().filter(elem -> !parameterIdsBefore.contains(elem)).toList();
+        Long eventId = newEventEntityDTO.getId();
+        List<Long> parameterIdsBefore = getEventParameterIds(eventId);
+        List<Long> parameterIdsAfter = newEventEntityDTO.getParameterIds();
+        List<Long> deletedParameterIds = parameterIdsBefore.stream().filter(elem -> !parameterIdsAfter.contains(elem)).toList();
+        List<Long> addedParameterIds = parameterIdsAfter.stream().filter(elem -> !parameterIdsBefore.contains(elem)).toList();
         eventParameterMappingRepository.deleteAllByListOfParameters(eventId, deletedParameterIds);
         try {
             eventEntityRepository.save(convertDTOToEntity(newEventEntityDTO));
@@ -171,7 +180,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventEntityDTO convertEntityToDTO(EventEntity inputObj) {
 
-        Map<String, String> parameters = getEventParameters(inputObj.getIdentifierCode());
+        Map<String, String> parameters = getEventParameters(inputObj.getId());
         EventEntityDTO entityDTO = modelMapper.map(inputObj, EventEntityDTO.class);
         entityDTO.setParameters(parameters);
 
