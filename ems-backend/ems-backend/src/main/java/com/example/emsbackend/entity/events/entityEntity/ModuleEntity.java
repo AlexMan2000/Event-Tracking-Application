@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @Entity
@@ -26,7 +27,7 @@ public class ModuleEntity {
     private String moduleName;
 
     @Column(name = "module_identifier")
-    private String moduleIdentifier;
+    private String identifierCode;
 
     @Column(name = "module_owner")
     private String moduleOwner;
@@ -57,4 +58,23 @@ public class ModuleEntity {
 
     @Column(name = "offline_date")
     private Date offlineDate;
+
+    /**
+     * Module Attributes
+     */
+    @ManyToMany
+    @JoinTable(
+            name = "module_page",
+            joinColumns = @JoinColumn(name = "module_id"),
+            inverseJoinColumns = @JoinColumn(name = "page_id")
+    )
+    private Set<PageEntity> modules;
+
+    @ManyToMany
+    @JoinTable(
+            name = "module_parameter",
+            joinColumns = @JoinColumn(name = "module_id"),
+            inverseJoinColumns = @JoinColumn(name = "parameter_id")
+    )
+    private Set<ParameterEntity> parameters;
 }

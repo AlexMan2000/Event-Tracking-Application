@@ -1,6 +1,7 @@
 package com.example.emsbackend.service.events;
 
 import com.example.emsbackend.commons.status.Message;
+import com.example.emsbackend.criteria_utils.searching.ProjectEntitySearchCriteria;
 import com.example.emsbackend.criteria_utils.searching.SearchCriteria;
 import com.example.emsbackend.dto.events.getDTO.GetIdentifiersDTO;
 import com.example.emsbackend.dto.events.getDTO.ProjectEntityGetObjectDTO;
@@ -12,12 +13,14 @@ public interface ProjectService {
 
     List<ProjectEntityGetObjectDTO> getAllProjects();
 
-    List<ProjectEntityGetObjectDTO> getAllProjectsFiltered(SearchCriteria searchCriteria);
+    List<ProjectEntityGetObjectDTO> getAllProjectsFiltered(ProjectEntitySearchCriteria searchCriteria);
 
     List<GetIdentifiersDTO> getAllMetaData();
 
+    ProjectEntityGetObjectDTO getProjectById(Long projectId);
+
     Message createProject(ProjectEntityUpdateObjectDTO projectEntityUpdateObjectDTO);
 
-    Message updateProjectById(Long projectId, ProjectEntityUpdateObjectDTO projectEntityUpdateObjectDTO);
+    Message updateProject(ProjectEntityUpdateObjectDTO projectEntityUpdateObjectDTO);
 
 }

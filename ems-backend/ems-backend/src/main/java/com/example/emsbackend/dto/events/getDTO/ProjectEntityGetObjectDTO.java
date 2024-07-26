@@ -31,5 +31,5 @@ public class ProjectEntityGetObjectDTO {
      * Module Attributes
      */
     private Set<ModuleEntityDTO> modules;
-    private Set<ParameterEntityDTO> params;
+    private Set<ParameterEntityDTO> parameters;
 }

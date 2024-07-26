@@ -2,6 +2,7 @@ package com.example.emsbackend.controller.events;
 
 import com.example.emsbackend.criteria_utils.searching.ParameterEntitySearchCriteria;
 import com.example.emsbackend.dto.events.entityDTO.ParameterEntityDTO;
+import com.example.emsbackend.dto.events.getDTO.GetIdentifiersDTO;
 import com.example.emsbackend.service.events.ParameterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +28,16 @@ public class ParameterController {
     }
 
 
+
+
     @GetMapping("/allIds")
     public List<Long> getAllParameterIds() {
         return parameterService.getAllParameterIds();
+    }
+
+    @GetMapping("/meta")
+    public List<GetIdentifiersDTO> getAllMetadata() {
+        return parameterService.getAllMetadata();
     }
 
     @GetMapping("/getdropdown")

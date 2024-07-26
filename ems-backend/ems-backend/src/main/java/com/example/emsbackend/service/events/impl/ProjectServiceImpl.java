@@ -2,6 +2,7 @@ package com.example.emsbackend.service.events.impl;
 
 import com.example.emsbackend.commons.enums.StatusCode;
 import com.example.emsbackend.commons.status.Message;
+import com.example.emsbackend.criteria_utils.searching.ProjectEntitySearchCriteria;
 import com.example.emsbackend.criteria_utils.searching.SearchCriteria;
 import com.example.emsbackend.criteria_utils.searching.impl.ProjectEntitySearchImpl;
 import com.example.emsbackend.dto.events.getDTO.GetIdentifiersDTO;
@@ -20,7 +21,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,7 +63,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectEntityGetObjectDTO> getAllProjectsFiltered(SearchCriteria searchCriteria) {
+    @Transactional
+    public List<ProjectEntityGetObjectDTO> getAllProjectsFiltered(ProjectEntitySearchCriteria searchCriteria) {
         return projectSearchFilter
                 .getItemsFiltered(searchCriteria, ProjectEntity.class)
                 .stream()
@@ -71,14 +75,22 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<GetIdentifiersDTO> getAllMetaData() {
-        return projectEntityRepository.findAllMetaData();
+        return projectEntityRepository.findAllMetaData().stream()
+                .map(elem -> this.modelMapper.map(elem, GetIdentifiersDTO.class))
+                .collect(Collectors.toList());
     }
 
+    @Override
+    public ProjectEntityGetObjectDTO getProjectById(Long projectId) {
+        return projectEntityRepository.findById(projectId)
+                .map(elem -> this.modelMapper.map(elem, ProjectEntityGetObjectDTO.class))
+                .orElseThrow(() -> {throw new RuntimeException("Project with" + projectId + "not found!");});
+    }
 
     @Override
     public Message createProject(ProjectEntityUpdateObjectDTO projectEntityUpdateObjectDTO) {
         try {
-            ProjectEntity projectEntity = recoverProjectEntityFromUpdateDTO(projectEntityUpdateObjectDTO);
+            ProjectEntity projectEntity = recoverProjectEntityFromUpdateDTO(projectEntityUpdateObjectDTO, 0);
             projectEntityRepository.save(projectEntity);
         }catch (Exception e) {
             e.printStackTrace();
@@ -88,9 +100,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Message updateProjectById(Long projectId, ProjectEntityUpdateObjectDTO projectEntityUpdateObjectDTO) {
+    public Message updateProject(ProjectEntityUpdateObjectDTO projectEntityUpdateObjectDTO) {
         try {
-            ProjectEntity projectEntity = recoverProjectEntityFromUpdateDTO(projectEntityUpdateObjectDTO);
+            ProjectEntity projectEntity = recoverProjectEntityFromUpdateDTO(projectEntityUpdateObjectDTO, 1);
             projectEntityRepository.save(projectEntity);
         }catch (Exception e) {
             e.printStackTrace();
@@ -100,16 +112,34 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
 
-    private ProjectEntity recoverProjectEntityFromUpdateDTO(ProjectEntityUpdateObjectDTO projectEntityUpdateObjectDTO) {
-        Long projectId = projectEntityUpdateObjectDTO.getId();
+    private ProjectEntity recoverProjectEntityFromUpdateDTO(ProjectEntityUpdateObjectDTO projectEntityUpdateObjectDTO, Integer mode) {
 
-        projectEntityRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found" + projectId));
+        ProjectEntity projectEntity = this.modelMapper.map(projectEntityUpdateObjectDTO, ProjectEntity.class);
 
+        Date nowTimeStamp = new Date();
+        if (mode == 0) {
+            // Create project
+            projectEntity.setGmtCreate(nowTimeStamp);
+            projectEntity.setGmtModify(nowTimeStamp);
+        } else {
+            Long projectId = projectEntityUpdateObjectDTO.getId();
+            ProjectEntity currProjectEntity = projectEntityRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found" + projectId));
+            projectEntity.setGmtCreate(currProjectEntity.getGmtCreate());
+            projectEntity.setGmtModify(nowTimeStamp);
+            String currProjectStatus = currProjectEntity.getProjectStatus();
+            projectEntity.setProjectOnlineTime(currProjectEntity.getProjectOnlineTime());
+            projectEntity.setProjectOfflineTime(currProjectEntity.getProjectOfflineTime());
+            if (!currProjectStatus.equals("已上线") && projectEntity.getProjectStatus().equals("已上线")) {
+                projectEntity.setProjectOnlineTime(nowTimeStamp);
+            }
+            if (currProjectStatus.equals("已上线") && !projectEntity.getProjectStatus().equals("已上线")) {
+                projectEntity.setProjectOfflineTime(nowTimeStamp);
+            }
+        }
 
         Set<ModuleEntity> moduleEntities = new HashSet<>();
         Set<ParameterEntity> parameterEntities = new HashSet<>();
 
-        ProjectEntity projectEntity = this.modelMapper.map(projectEntityUpdateObjectDTO, ProjectEntity.class);
         for (Long moduleId: projectEntityUpdateObjectDTO.getModuleIds()) {
             ModuleEntity moduleEntity = moduleEntityRepository.findById(moduleId).orElseThrow(() -> new RuntimeException("Module not found" + moduleId));
             moduleEntities.add(moduleEntity);
@@ -120,7 +150,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         projectEntity.setModules(moduleEntities);
-        projectEntity.setParams(parameterEntities);
+        projectEntity.setParameters(parameterEntities);
 
         return projectEntity;
     }

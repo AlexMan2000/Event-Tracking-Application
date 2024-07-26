@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface ProjectEntityRepository extends JpaRepository<ProjectEntity, Long> {
 
-    @Query(value = "SELECT id, identifier_code from project", nativeQuery = true)
+    @Query(value = "SELECT id, identifier_code as identifierCode from project", nativeQuery = true)
     List<GetIdentifiersDTO> findAllMetaData();
 }

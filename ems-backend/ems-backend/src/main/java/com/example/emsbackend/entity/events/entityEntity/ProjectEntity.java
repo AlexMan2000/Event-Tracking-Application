@@ -27,36 +27,26 @@ public class ProjectEntity {
     @Column(name = "gmt_modify")
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtModify;
-
     @Column(name = "project_name")
     private String projectName;
-
     @Column(name = "project_desc")
     private String projectDesc;
-
     @Column(name = "project_url")
     private String projectUrl;
-
     @Column(name = "project_status")
     private String projectStatus;
-
     @Column(name = "project_online_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date projectOnlineTime;
-
     @Column(name = "project_offline_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date projectOfflineTime;
-
     @Column(name = "project_manager")
     private String projectManager;
-
     @Column(name = "product_manager")
     private String productManager;
-
     @Column(name = "creator")
     private String creator;
-
     @Column(name = "identifier_code")
     private String identifierCode;
 
@@ -73,10 +63,10 @@ public class ProjectEntity {
 
     @ManyToMany
     @JoinTable(
-            name = "project_parmeter",
+            name = "project_parameter",
             joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "paremeter_id")
+            inverseJoinColumns = @JoinColumn(name = "parameter_id")
     )
-    private Set<ParameterEntity> params;
+    private Set<ParameterEntity> parameters;
 
 }

@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface ModuleEntityRepository extends JpaRepository<ModuleEntity, Long> {
 
-    @Query(value = "SELECT id, identifier_code from module", nativeQuery = true)
+    @Query(value = "SELECT id, module_identifier as identifierCode  from module", nativeQuery = true)
     List<GetIdentifiersDTO> findAllMetaData();
 }

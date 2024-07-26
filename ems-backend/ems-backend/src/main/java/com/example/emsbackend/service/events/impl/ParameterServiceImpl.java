@@ -4,6 +4,7 @@ import com.example.emsbackend.criteria_utils.searching.ParameterEntitySearchCrit
 import com.example.emsbackend.criteria_utils.searching.impl.ParameterEntitySearchImpl;
 import com.example.emsbackend.dto.events.entityDTO.EventEntityDTO;
 import com.example.emsbackend.dto.events.entityDTO.ParameterEntityDTO;
+import com.example.emsbackend.dto.events.getDTO.GetIdentifiersDTO;
 import com.example.emsbackend.entity.events.entityEntity.ParameterEntity;
 import com.example.emsbackend.repository.events.entityRepository.EventEntityRepository;
 import com.example.emsbackend.repository.events.mappingRepository.EventParameterMappingRepository;
@@ -53,6 +54,11 @@ public class ParameterServiceImpl implements ParameterService {
 
     public List<Long> getAllParameterIds() {
         return parameterEntityRepository.findAll().stream().map(elem -> elem.getId()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GetIdentifiersDTO> getAllMetadata() {
+        return parameterEntityRepository.findAllMetaData();
     }
 
 

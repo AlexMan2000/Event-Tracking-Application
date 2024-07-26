@@ -3,6 +3,7 @@ package com.example.emsbackend.service.events;
 import com.example.emsbackend.criteria_utils.searching.ParameterEntitySearchCriteria;
 import com.example.emsbackend.dto.events.entityDTO.EventEntityDTO;
 import com.example.emsbackend.dto.events.entityDTO.ParameterEntityDTO;
+import com.example.emsbackend.dto.events.getDTO.GetIdentifiersDTO;
 
 
 import java.util.List;
@@ -16,6 +17,9 @@ public interface ParameterService {
     List<String> getAllParameterIdentifiers();
 
     List<Long> getAllParameterIds();
+
+
+    List<GetIdentifiersDTO> getAllMetadata();
 
     /**
      * Get the necessary information for dropdown menu for event parameter management
