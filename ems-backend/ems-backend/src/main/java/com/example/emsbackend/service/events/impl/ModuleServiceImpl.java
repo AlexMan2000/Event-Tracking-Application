@@ -1,5 +1,6 @@
 package com.example.emsbackend.service.events.impl;
 
+import com.example.emsbackend.commons.enums.StatusCode;
 import com.example.emsbackend.commons.status.Message;
 import com.example.emsbackend.criteria_utils.searching.ModuleEntitySearchCriteria;
 import com.example.emsbackend.criteria_utils.searching.impl.ModuleEntitySearchImpl;
@@ -7,9 +8,12 @@ import com.example.emsbackend.dto.events.getDTO.GetIdentifiersDTO;
 import com.example.emsbackend.dto.events.getDTO.ModuleEntityGetObjectDTO;
 import com.example.emsbackend.dto.events.getDTO.ProjectEntityGetObjectDTO;
 import com.example.emsbackend.dto.events.modifyDTO.ModuleEntityUpdateObjectDTO;
+import com.example.emsbackend.dto.events.modifyDTO.ParameterEntityUpdateObjectDTO;
 import com.example.emsbackend.entity.events.entityEntity.ModuleEntity;
+import com.example.emsbackend.entity.events.entityEntity.ParameterEntity;
 import com.example.emsbackend.repository.events.entityRepository.ModuleEntityRepository;
 import com.example.emsbackend.service.events.ModuleService;
+import com.example.emsbackend.service.utils.UtilityMethods;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,9 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private UtilityMethods utilityMethods;
 
     @Autowired
     private ModuleEntitySearchImpl moduleSearchFilter;
@@ -63,12 +70,40 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
-    public Message createModule(ModuleEntityUpdateObjectDTO projectEntityUpdateObjectDTO) {
-        return null;
+    public Message createModule(ModuleEntityUpdateObjectDTO moduleEntityUpdateObjectDTO) {
+        try {
+            ModuleEntity moduleEntity = this.utilityMethods.recoverEntityFromUpdateDTO(
+                    ModuleEntityUpdateObjectDTO.class
+                    , ModuleEntity.class
+                    , "module"
+                    , moduleEntityUpdateObjectDTO
+                    , 0
+                    , List.of()
+            );
+            moduleEntityRepository.save(moduleEntity);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return new Message(StatusCode.CREATE_FAILURE, "Error Creating records");
+        }
+        return new Message(StatusCode.OK, "Successfully creating records");
     }
 
     @Override
-    public Message updateModule(ModuleEntityUpdateObjectDTO projectEntityUpdateObjectDTO) {
-        return null;
+    public Message updateModule(ModuleEntityUpdateObjectDTO moduleEntityUpdateObjectDTO) {
+        try {
+            ModuleEntity moduleEntity = this.utilityMethods.recoverEntityFromUpdateDTO(
+                    ModuleEntityUpdateObjectDTO.class
+                    , ModuleEntity.class
+                    , "module"
+                    , moduleEntityUpdateObjectDTO
+                    , 1
+                    , List.of("page", "parameter")
+            );
+            moduleEntityRepository.save(moduleEntity);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return new Message(StatusCode.CREATE_FAILURE, "Error inserting records");
+        }
+        return new Message(StatusCode.OK, "Successfully inserting records");
     }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Data
@@ -45,8 +46,14 @@ public class EventEntity {
     private Date eventOfflineTime;
     @Column(name = "sample_images")
     private String sampleImages;
-//    @Id
-
-
-    // Getters and Setters
+    /**
+     * Module Attributes
+     */
+    @ManyToMany
+    @JoinTable(
+            name = "event_parameter",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "parameter_id")
+    )
+    private Set<ParameterEntity> parameters;
 }

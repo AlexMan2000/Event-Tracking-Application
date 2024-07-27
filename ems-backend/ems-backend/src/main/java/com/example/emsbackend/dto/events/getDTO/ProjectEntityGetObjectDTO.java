@@ -1,7 +1,5 @@
 package com.example.emsbackend.dto.events.getDTO;
 
-import com.example.emsbackend.dto.events.entityDTO.ModuleEntityDTO;
-import com.example.emsbackend.dto.events.entityDTO.ParameterEntityDTO;
 import lombok.Data;
 
 import java.util.Date;
@@ -30,6 +28,6 @@ public class ProjectEntityGetObjectDTO {
     /**
      * Module Attributes
      */
-    private Set<ModuleEntityDTO> modules;
-    private Set<ParameterEntityDTO> parameters;
+    private Set<ModuleEntityGetObjectDTO> modules;
+    private Set<ParameterEntityGetObjectDTO> parameters;
 }

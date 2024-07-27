@@ -2,7 +2,8 @@ export const stateToTagColor = {
     "已上线": "green",
     "未上线": "red",
     "已删除": "grey",
-    "审核中": "lightblue"
+    "审核中": "lightblue",
+    "维护中": "purple"
   }
 
 
@@ -10,7 +11,8 @@ export const stateToTagColor = {
     "parameter": "参数",
     "module": "模组",
     "page": "页面",
-    "project": "项目"
+    "project": "项目",
+    "event": "事件"
   }
 
 
@@ -18,7 +20,8 @@ export const stateToTagColor = {
     "已上线",
     "未上线",
     "已删除",
-    "审核中"
+    "审核中",
+    "维护中"
   ]
 
 

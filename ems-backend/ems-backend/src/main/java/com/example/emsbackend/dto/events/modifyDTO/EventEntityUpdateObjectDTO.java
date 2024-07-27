@@ -1,22 +1,13 @@
-package com.example.emsbackend.dto.events.entityDTO;
+package com.example.emsbackend.dto.events.modifyDTO;
+
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 
 @Data
-public class EventEntityDTO {
-
-
-    // List of parameterIds
-    private List<Long> parameterIds;
-
-    private List<ParameterEntityDTO> parameterObjs;
-
-    // Key-value pair for parameter, (parameterKey, parameterValue)
-    private Map<String, String> parameters; // Used for backend -> frontend
+public class EventEntityUpdateObjectDTO {
     private String identifierCode;
     private Date gmtCreate;
     private Date gmtModify;
@@ -30,5 +21,5 @@ public class EventEntityDTO {
     private Date eventOfflineTime;
     private String sampleImages;
     private Long id;
-
+    Set<Long> parameterIds;
 }

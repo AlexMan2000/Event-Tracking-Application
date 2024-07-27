@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React from "react"
 import {Tag} from "antd";
 import EditableTable from "../../commons/tables/EditableTable"
 import { projectEntityColumn } from "../../commons/statics/entityColumn";
@@ -29,7 +29,6 @@ const ProjectManagementIndex = ({setMenuIndex, databaseName}) => {
         }
     })
     
-    const requestBase = "http://localhost:8083/projects";
 
     const entityCreateFields = [
           {
@@ -175,7 +174,6 @@ const ProjectManagementIndex = ({setMenuIndex, databaseName}) => {
     return ( 
         <EditableTable
             setMenuIndex = {setMenuIndex}
-            requestBase = {requestBase}
             entityName = {entityName}
             entityTableColumns = {entityTableColumns}
             entityCreateFields = {entityCreateFields}

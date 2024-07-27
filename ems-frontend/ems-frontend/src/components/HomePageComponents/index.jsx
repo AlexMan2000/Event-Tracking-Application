@@ -2,8 +2,7 @@ import UserManagementIndex from './UserManagement';
 import EventManagementIndex from './EventTrackingManagement';
 import ChattingRoomIndex from './ChattingRoom';
 import PhotoSharingPage from './PhotoSharing';
-import ParameterManagementIndex from './ParameterManagement';
-import ProjectManagementIndex from './ProjectManagement';
+
 import TestForm from './TestForm';
 import React, { useState } from 'react';
 
@@ -17,7 +16,11 @@ import {
     UserOutlined,
     VideoCameraOutlined,
   } from '@ant-design/icons';
-  import { Layout, Menu, theme } from 'antd';
+import { Layout, Menu, theme } from 'antd';
+import ParameterManagementIndex from './ParameterManagement';
+import ProjectManagementIndex from './ProjectManagement';
+import ModuleManagementIndex from './ModuleManagement';
+import PageManagementIndex from './PageManagement';
 
 
   const { Header, Content, Footer, Sider } = Layout;
@@ -34,9 +37,11 @@ function HomePage() {
 
     // Sub pages
     const pages = [<UserManagementIndex/>,
-         <EventManagementIndex setMenuIndex={setMenuIndex}/>,
-          <ParameterManagementIndex/>,
+         <EventManagementIndex setMenuIndex={setMenuIndex} databaseName={"event"}/>,
+          <ParameterManagementIndex setMenuIndex={setMenuIndex} databaseName={"parameter"}/>,
           <ProjectManagementIndex setMenuIndex={setMenuIndex} databaseName={"project"}/>,
+          <ModuleManagementIndex setMenuIndex={setMenuIndex} databaseName={"module"}/>,
+          <PageManagementIndex setMenuIndex={setMenuIndex} databaseName={"page"}/>,
           <ChattingRoomIndex/>,  
           <PhotoSharingPage/>,
           <TestForm/>
@@ -45,9 +50,11 @@ function HomePage() {
          "Event Management", 
          "Parameter Management",
          "Project Management",
-          "Chatting Room",
-          "Photo Sharing",
-          "Test Form"
+         "Module Management",
+         "Page Management",
+        //   "Chatting Room",
+        //   "Photo Sharing",
+        //   "Test Form"
           ]
 
     const items = [

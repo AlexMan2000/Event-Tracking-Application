@@ -5,10 +5,9 @@ import {Tag, notification, Space, Button, Modal, Form, Upload, Switch, Select, I
 import {PlusOutlined, DownOutlined} from "@ant-design/icons";
 import { states, entityNameToName, entityToMenuIndex } from '../statics/renderMappings';
 import DynamicSelect from '../utils/DynamicSelect';
-import { getAllMetadataApi, getByIdApi } from '../../../apis/commonApi';
+import { getAllMetadataApi, getByIdApi, getRequestBaseUrlApi } from '../../../apis/commonApi';
 import { entityNameInterface } from '../../../interfaces/commonInterface';
 import { truncateObjectByExcluding, truncateObjectByIncluding, sortForeignRelationBy } from '../utils/objectHandlers';
-
 
 interface MetadataItem {
   id: number;
@@ -29,14 +28,13 @@ export default function EditableTable(props) {
 
   const {
     setMenuIndex
-    , requestBase
     , entityName
     , entityTableColumns
     , entityCreateFields
     , entityEditFields
     , addprosConfig} = props;
 
-
+  const requestBase = getRequestBaseUrlApi(entityName);
   const displayEntityName = entityName.charAt(0).toUpperCase() + entityName.slice(1);
   const relationTableDataInitialState = addprosConfig.foreignRelations.reduce((acc: any, relation: entityNameInterface) => {
     acc[`${relation}s`] = [];
@@ -46,8 +44,6 @@ export default function EditableTable(props) {
     acc[`${relation}s`] = [];
     return acc;
   }, {});
-  const foreignRelationNames = addprosConfig?.foreignRelations;
-   
 
   // Output:  {parameters: [], modules: []}
   const [foreignRelationTableData, setForeignRelationTableData] = useState<EntityMap>(relationTableDataInitialState);
@@ -59,7 +55,7 @@ export default function EditableTable(props) {
     {
       title: '操作',
       key: 'entityOperation',
-      render: (_, record) => {
+      render: (_:any, record: any) => {
         // console.log(record);
         return (<Space size="middle">
           <a key ={`entityEditing+${record.id}`} onClick={() => {handleEditableRowModal(record.id)}}>
@@ -169,8 +165,10 @@ export default function EditableTable(props) {
     const res = await axios.get(url);
   
     const entityObjectData = res.data
+    console.log(entityObjectData)
 
     let foreignRelationTableDataObj = truncateObjectByIncluding(entityObjectData, addprosConfig.foreignRelations.map((elem:string)=> `${elem}s`));
+    console.log(foreignRelationTableDataObj)
     const fieldsToExclude: string[] = addprosConfig.foreignRelations.map((propName:entityNameInterface) => (
       `${propName}s`
     ));
@@ -331,11 +329,20 @@ export default function EditableTable(props) {
           onFinish={onFormCreateUpdateEntityFinish}
           initialValues={{ active: true }}
         >
-        <div className={"section-divider"}>
+        <div style={
+          {
+              fontSize: "15px",
+              /* font-family: "SimHei"; */
+              fontWeight: "bold",
+              color:"grey",
+              margin:"15px 15px 15px 0px"
+          }
+          }
+        >
           1. Please set basic information
         </div>
           {
-             modalShowUpFields.map(elem => {
+             modalShowUpFields.map((elem:any) => {
               return (
                 <Form.Item
                   name={elem.dataIndex}
@@ -386,7 +393,15 @@ export default function EditableTable(props) {
 
             return (
               <>
-                <div className={"section-divider"}>
+                <div style={
+          {
+              fontSize: "15px",
+              /* font-family: "SimHei"; */
+              fontWeight: "bold",
+              color:"grey",
+              margin:"15px 15px 15px 0px"
+          }
+          }>
                   {`${index + 2}.请设置${entityNameToName[entityName]}${entityNameToName[addPropName]}`}
                 </div>
                 <Form 

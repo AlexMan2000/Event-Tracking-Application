@@ -1,13 +1,7 @@
 package com.example.emsbackend.dto.events.getDTO;
 
-import com.example.emsbackend.dto.events.entityDTO.ModuleEntityDTO;
-import com.example.emsbackend.dto.events.entityDTO.ParameterEntityDTO;
 import com.example.emsbackend.entity.events.entityEntity.PageEntity;
 import com.example.emsbackend.entity.events.entityEntity.ParameterEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import lombok.Data;
 
 import java.util.Date;
@@ -29,8 +23,8 @@ public class ModuleEntityGetObjectDTO {
     private String sampleImages;
     private String moduleEvents;
     private String creator;
-    private Date onlineDate;
-    private Date offlineDate;
-    private Set<PageEntity> pages;
-    private Set<ParameterEntity> parameters;
+    private Date moduleOnlineTime;
+    private Date moduleOfflineTime;
+    private Set<PageEntityGetObjectDTO> pages;
+    private Set<ParameterEntityGetObjectDTO> parameters;
 }

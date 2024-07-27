@@ -54,10 +54,12 @@ public class ModuleEntity {
     private String creator;
 
     @Column(name = "online_date")
-    private Date onlineDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date moduleOnlineTime;
 
     @Column(name = "offline_date")
-    private Date offlineDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date moduleOfflineTime;
 
     /**
      * Module Attributes
@@ -68,7 +70,7 @@ public class ModuleEntity {
             joinColumns = @JoinColumn(name = "module_id"),
             inverseJoinColumns = @JoinColumn(name = "page_id")
     )
-    private Set<PageEntity> modules;
+    private Set<PageEntity> pages;
 
     @ManyToMany
     @JoinTable(

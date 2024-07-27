@@ -7,7 +7,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class EventPageId implements Serializable {
+public class PageEventId implements Serializable {
     @Column(name="event_id")
     private Long eventId;
     @Column(name="page_id")

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @Entity
@@ -55,5 +56,31 @@ public class PageEntity {
 
     @Column(name = "identifier_code")
     private String identifierCode;
+
+    @Column(name = "page_online_time")
+    private Date pageOnlineTime;
+
+    @Column(name = "page_offline_time")
+    private Date pageOfflineTime;
+
+
+    /**
+     * Module Attributes
+     */
+    @ManyToMany
+    @JoinTable(
+            name = "page_event",
+            joinColumns = @JoinColumn(name = "page_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id")
+    )
+    private Set<EventEntity> events;
+
+    @ManyToMany
+    @JoinTable(
+            name = "page_parameter",
+            joinColumns = @JoinColumn(name = "page_id"),
+            inverseJoinColumns = @JoinColumn(name = "parameter_id")
+    )
+    private Set<ParameterEntity> parameters;
 
 }

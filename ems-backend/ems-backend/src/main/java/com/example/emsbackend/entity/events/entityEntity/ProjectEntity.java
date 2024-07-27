@@ -1,6 +1,5 @@
 package com.example.emsbackend.entity.events.entityEntity;
 
-import com.example.emsbackend.dto.events.entityDTO.ParameterEntityDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 

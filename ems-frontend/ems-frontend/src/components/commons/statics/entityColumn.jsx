@@ -108,8 +108,8 @@ export const moduleEntityColumn = [
     },
     {
       title: 'Module 编码',
-      dataIndex: 'moduleIdentifier',
-      key: 'moduleIdentifier',
+      dataIndex: 'identifierCode',
+      key: 'identifierCode',
       valueType: 'text',
     },
     {
@@ -162,14 +162,14 @@ export const moduleEntityColumn = [
     },
     {
       title: '上线时间',
-      dataIndex: 'onlineDate',
-      key: 'onlineDate',
+      dataIndex: 'moduleOnlineTime',
+      key: 'moduleOnlineTime',
       valueType: 'dateTime',
     },
     {
       title: '下线时间',
-      dataIndex: 'offlineDate',
-      key: 'offlineDate',
+      dataIndex: 'moduleOfflineTime',
+      key: 'moduleOfflineTime',
       valueType: 'dateTime',
     }
     

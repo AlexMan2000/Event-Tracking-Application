@@ -1,14 +1,8 @@
-package com.example.emsbackend.dto.events.entityDTO;
-
-import lombok.Data;
+package com.example.emsbackend.criteria_utils.searching;
 
 import java.util.Date;
-import java.util.List;
 
-@Data
-public class PageEntityDTO {
-
-    private List<EventEntityDTO> events;
+public class PageEntitySearchCriteria implements SearchCriteria {
     private Long id;
     private Date gmtCreate;
     private Date gmtModify;
@@ -23,4 +17,7 @@ public class PageEntityDTO {
     private String parentPages;
     private String sampleImages;
     private String identifierCode;
+    private Date pageOnlineTime;
+    private Date pageOfflineTime;
+
 }

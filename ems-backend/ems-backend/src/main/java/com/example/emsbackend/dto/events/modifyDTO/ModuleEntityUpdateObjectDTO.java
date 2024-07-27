@@ -26,8 +26,8 @@ public class ModuleEntityUpdateObjectDTO {
     private String sampleImages;
     private String moduleEvents;
     private String creator;
-    private Date onlineDate;
-    private Date offlineDate;
+    private Date moduleOnlineTime;
+    private Date moduleOfflineTime;
 
     /**
      * Module Attributes

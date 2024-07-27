@@ -1,10 +1,11 @@
-package com.example.emsbackend.criteria_utils.searching;
+package com.example.emsbackend.dto.events.modifyDTO;
 
-import com.example.emsbackend.criteria_utils.searching.SearchCriteria;
+import lombok.Data;
 
 import java.util.Date;
 
-public class ParameterEntitySearchCriteria implements SearchCriteria {
+@Data
+public class ParameterEntityUpdateObjectDTO {
     private Long id;
     private Date gmtCreate;
     private Date gmtModify;
