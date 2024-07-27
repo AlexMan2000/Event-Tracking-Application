@@ -23,6 +23,11 @@ public class UtilityMethods {
     }
 
 
+    /**
+     * Get the Repository Interface by relationField(key)
+     * @param relationField The name of the relation table, e.g. "project", module", "event"
+     * @return The Jpa Repository that is responsible for handling basic CRUDs
+     */
     private JpaRepository<?, Long> getRepositoryForRelation(String relationField) {
         JpaRepository<?, Long> repository = repositoryMap.get(relationField);
         if (repository == null) {
@@ -32,6 +37,18 @@ public class UtilityMethods {
     }
 
 
+    /**
+     * Map a user-submitted object to a persistence object that already has the correct create/modify time and status(if the object has this field)
+     * @param updateObjectClass Need to be EntityUpdateObjectDTO.class, the user-submitted DTO type, e.g. EventEntityUpdateObjectDTO
+     * @param targetEntityClass Need to be Entity.class, the database Entity Class, e.g. EventEntity.class
+     * @param sourceRelation The table name corresponding to the object that user is trying to create or update, e.g "project", "event"
+     * @param updateObject The actual object the user upload through form submission
+     * @param mode 0 for creation, 1 for insertion(updating)
+     * @param foreignRelationFields The object's foreign relation tables that should be updated simultaneously with the source relation
+     * @return The entity object that is ready to be inserted into the database, if no other fields need to be reset
+     * @param <Entity> Persistence Entity Class
+     * @param <UpdateDTO> User Submitted Object Class
+     */
     public <Entity, UpdateDTO> Entity recoverEntityFromUpdateDTO(
             Class<UpdateDTO> updateObjectClass
             , Class<Entity> targetEntityClass
@@ -120,6 +137,11 @@ public class UtilityMethods {
         return newEntityObj;
     }
 
+    /**
+     * Capitalize the first character of a string
+     * @param str Input String
+     * @return The capitalized string
+     */
     private String capitalize(String str) {
         if (str == null || str.isEmpty()) {
             return str;
