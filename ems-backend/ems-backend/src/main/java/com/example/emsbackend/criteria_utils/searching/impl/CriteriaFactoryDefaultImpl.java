@@ -28,7 +28,7 @@ public abstract class CriteriaFactoryDefaultImpl<T> implements CriteriaFactory<T
 //    @Autowired
     public CriteriaFactoryDefaultImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
-        this.criteriaBuilder = this.entityManager.getCriteriaBuilder();;
+        this.criteriaBuilder = this.entityManager.getCriteriaBuilder();
     }
 
     @Override

@@ -4,7 +4,6 @@ package com.example.emsbackend;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -17,7 +16,7 @@ public class EmsBackendApplication {
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
-	};
+	}
 
 	@Bean
 	public AtomicLong getTimeCounter() { return new AtomicLong(); }

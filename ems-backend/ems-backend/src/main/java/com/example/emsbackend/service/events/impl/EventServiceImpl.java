@@ -8,8 +8,6 @@ import com.example.emsbackend.dto.events.getDTO.GetIdentifiersDTO;
 import com.example.emsbackend.dto.events.modifyDTO.EventEntityUpdateObjectDTO;
 import com.example.emsbackend.entity.events.entityEntity.EventEntity;
 import com.example.emsbackend.repository.events.entityRepository.EventEntityRepository;
-import com.example.emsbackend.repository.events.mappingRepository.EventParameterMappingRepository;
-import com.example.emsbackend.repository.events.entityRepository.ParameterEntityRepository;
 import com.example.emsbackend.service.events.EventService;
 import com.example.emsbackend.criteria_utils.searching.EventEntitySearchCriteria;
 import com.example.emsbackend.service.utils.UtilityMethods;
@@ -29,12 +27,6 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private EventEntityRepository eventEntityRepository;
-
-    @Autowired
-    private EventParameterMappingRepository eventParameterMappingRepository;
-
-    @Autowired
-    private ParameterEntityRepository parameterEntityRepository;
 
     @Autowired
     private UtilityMethods utilityMethods;

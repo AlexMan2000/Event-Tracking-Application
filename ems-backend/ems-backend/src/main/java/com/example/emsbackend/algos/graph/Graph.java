@@ -38,11 +38,8 @@ public class Graph<T> {
             }
 
             GraphNode oe = (GraphNode) other;
-            if (oe.getWeight() == weight
-                    && oe.getWeight() == this.getWeight()) {
-                return true;
-            }
-            return false;
+            return oe.getWeight() == weight
+                    && oe.getWeight() == this.getWeight();
         }
 
 
@@ -71,12 +68,9 @@ public class Graph<T> {
             }
 
             GraphEdge oe = (GraphEdge) other;
-            if (oe.getTo().equals(to)
-                && oe.getTo().equals(to)
-                && oe.getWeight() == this.getWeight()) {
-                return true;
-            }
-            return false;
+            return oe.getTo().equals(to)
+                    && oe.getTo().equals(to)
+                    && oe.getWeight() == this.getWeight();
         }
 
         @Override
@@ -99,7 +93,7 @@ public class Graph<T> {
         GraphEdge newEdge = new GraphEdge(weight, n1, n2);
         if (edges.contains(newEdge)) {
             throw new RuntimeException("You have added this edge before, no parallel edges allowed!");
-        };
+        }
         this.edges.add(newEdge);
     }
 

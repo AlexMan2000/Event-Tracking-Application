@@ -19,7 +19,7 @@ public class PhotoServiceImpl implements PhotoService {
             System.out.println(key);
         }
 
-        int size = visited.values().stream().filter(elem -> elem == false).collect(Collectors.toList()).size();
+        int size = visited.values().stream().filter(elem -> !elem).collect(Collectors.toList()).size();
         System.out.println(size);
 
     }

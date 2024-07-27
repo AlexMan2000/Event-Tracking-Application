@@ -22,14 +22,14 @@ public interface EventParameterMappingRepository extends JpaRepository<EventPara
     List<Long> findAllEventEntitiesForParaById(Long paraID);
 
 
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM EventParameterEntity ep WHERE ep.id.eventId = :eventId AND ep.id.parameterId IN :parameterIds")
-    void deleteAllByListOfParameters(@Param("eventId") Long eventId, @Param("parameterIds") List<Long> parameterMappingToDelete);
+//    @Transactional
+//    @Modifying
+//    @Query("DELETE FROM EventParameterEntity ep WHERE ep.id.eventId = :eventId AND ep.id.parameterId IN :parameterIds")
+//    void deleteAllByListOfParameters(@Param("eventId") Long eventId, @Param("parameterIds") List<Long> parameterMappingToDelete);
 
 
-    @Transactional
-    @Modifying
-    @Query(value = "INSERT INTO event_parameter (event_id, parameter_id) values (?1, ?2)", nativeQuery = true)
-    void insertAllByListOfParameters(Long eventId, Long parameterMappingToInsert);
+//    @Transactional
+//    @Modifying
+//    @Query(value = "INSERT INTO event_parameter (event_id, parameter_id) values (?1, ?2)", nativeQuery = true)
+//    void insertAllByListOfParameters(Long eventId, Long parameterMappingToInsert);
 }
