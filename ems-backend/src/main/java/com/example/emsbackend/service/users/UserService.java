@@ -3,6 +3,7 @@ package com.example.emsbackend.service.users;
 import com.example.emsbackend.dto.users.RoleEntityDTO;
 import com.example.emsbackend.dto.users.UserEntityDTO;
 import com.example.emsbackend.criteria_utils.searching.UserEntitySearchCriteria;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -15,11 +16,15 @@ public interface UserService {
 
     UserEntityDTO getUserDTOByEmail(String email);
 
+    UserDetails getUserDetails(String email);
+
     RoleEntityDTO getUserRoleById(Long id);
+
 
     UserEntityDTO createOrUpdateUser(UserEntityDTO userEntityDTO);
 
     UserEntityDTO updateUserByEmail(UserEntityDTO userEntityDTO, String email);
+
 
     UserEntityDTO updateUserById(UserEntityDTO userEntityDTO, Long id);
 

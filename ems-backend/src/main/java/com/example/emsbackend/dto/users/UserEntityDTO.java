@@ -17,4 +17,6 @@ public class UserEntityDTO {
     private Date lastLogin;
     private String intro;
     private String profile;
+
+
 }

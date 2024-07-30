@@ -11,6 +11,7 @@ import com.example.emsbackend.service.users.UserService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,6 +53,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntityDTO getUserDTOByEmail(String email) { return entityToDto(userEntityRepository.findUserEntityByEmail(email));}
+
+    public UserDetails getUserDetails(String email) { return userEntityRepository.findUserEntityByEmail(email);}
+
+
 
     @Override
     public RoleEntityDTO getUserRoleById(Long id) {

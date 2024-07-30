@@ -17,9 +17,6 @@ import java.util.UUID;
 public class LoginController {
     private final LoginService loginService;
 
-    private final static long timeMillis = 1000*60*60*24;
-    private String symmetricKey = "admin";
-
 
     @Autowired
     public LoginController(LoginService loginService) {
@@ -49,43 +46,6 @@ public class LoginController {
     }
 
 
-    public String generateToken(UserEntityDTO userEntityDTO) {
-        // JWT的组成(三部分)
-        // 1. Header {"type"; 'JWT", "alg": "HS256"} 表示加密的算法
-        // 2. Payload {"sub": "1234567890", "name":"john", "admin":true} 存放需要加密的信息，通常是关于用户的
-        // 3. Signature:
-        // encodedString = Signature base64UrlEncode(header) + '.' + base64UrlEncode(payload)
-        // signature = HMACSFA256(encodedString(), 'secret');
-        // 将加密之后的header和payload通过'.'进行拼接
-
-
-        JwtBuilder jwtBuilder = Jwts.builder();
-
-        String jwtToken = jwtBuilder
-                // header
-                .setHeaderParam("type", "JWT")
-                .setHeaderParam("alg", "HS256")
-                // payload
-                .claim("email",userEntityDTO.getEmail())
-                .claim("passwordHash", userEntityDTO.getPasswordHash())
-                .claim("registeredAT", userEntityDTO.getRegisteredAt())
-                .setExpiration(new Date(System.currentTimeMillis() + timeMillis)) // 设置有效期为一天
-                .setId(UUID.randomUUID().toString())
-                // Signature,
-                .signWith(SignatureAlgorithm.HS256, symmetricKey)
-                .compact();
-
-        // The token is concatenated by the base64encoded header, payload and signature
-        return jwtToken;
-    }
-
-
-    public void parseToken(String token) {
-        JwtParser jwtParser = Jwts.parser();
-        Jws<Claims> claimsJws = jwtParser.setSigningKey(symmetricKey).parseClaimsJws(token);
-        Claims body = claimsJws.getBody();
-
-    }
 
 
 

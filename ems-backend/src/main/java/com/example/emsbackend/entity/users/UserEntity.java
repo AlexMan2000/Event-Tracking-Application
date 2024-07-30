@@ -3,13 +3,22 @@ package com.example.emsbackend.entity.users;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
+
+/**
+ * Implement UserDetails to use Spring Security Features
+ */
 @Entity
 @Data
 @Table(name = "user")
-public class UserEntity {
+public class UserEntity implements UserDetails {
 
     @Id
     // Auto-incremented PK
@@ -53,4 +62,50 @@ public class UserEntity {
     @Column(name = "profile", columnDefinition = "TEXT")
     private String profile;
 
+    @OneToOne
+    @JoinColumn(name="role_id")
+    private RoleEntity role;
+
+    /**
+     * List of roles that a user has, default to be one role associated with each user
+     * @return List of roles
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.getSlug()));
+    }
+
+    @Override
+    public String getPassword() {
+        return getPasswordHash();
+    }
+
+    @Override
+    public String getUsername() {
+        return getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    /**
+     * Whether user is enabled or not
+     * @return
+     */
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
