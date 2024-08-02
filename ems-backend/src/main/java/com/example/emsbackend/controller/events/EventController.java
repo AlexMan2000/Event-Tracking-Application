@@ -1,7 +1,7 @@
 package com.example.emsbackend.controller.events;
 
 
-import com.example.emsbackend.commons.enums.StatusCode;
+import com.example.emsbackend.commons.enums.https.StatusCode;
 import com.example.emsbackend.commons.status.Message;
 import com.example.emsbackend.criteria_utils.searching.EventEntitySearchCriteria;
 import com.example.emsbackend.dto.events.getDTO.EventEntityGetObjectDTO;

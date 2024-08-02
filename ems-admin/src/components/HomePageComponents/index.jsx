@@ -21,6 +21,7 @@ import ParameterManagementIndex from './ParameterManagement';
 import ProjectManagementIndex from './ProjectManagement';
 import ModuleManagementIndex from './ModuleManagement';
 import PageManagementIndex from './PageManagement';
+import HeaderComponent from './Header/header';
 
 
   const { Header, Content, Footer, Sider } = Layout;
@@ -100,12 +101,14 @@ function HomePage() {
             }}
         >
             <Header
-            style={{
-                width: "auto",
-                padding: 0,
-                background: colorBgContainer,
-            }}
-            />
+                style={{
+                    width: "auto",
+                    padding: 0,
+                    background: colorBgContainer,
+                }}
+            >
+                <HeaderComponent></HeaderComponent>
+            </Header>
             <Content
             style={{
                 margin: '24px 16px 0',

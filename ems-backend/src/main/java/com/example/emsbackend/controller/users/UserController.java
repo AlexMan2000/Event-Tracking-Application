@@ -5,6 +5,7 @@ import com.example.emsbackend.criteria_utils.searching.UserEntitySearchCriteria;
 import com.example.emsbackend.service.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -22,6 +23,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<UserEntityDTO>> getUsersByFilters(UserEntitySearchCriteria userEntitySearchCriteria) {
         return ResponseEntity.ok(userService.getUserDTOByFilter(userEntitySearchCriteria));

@@ -1,9 +1,8 @@
 package com.example.emsbackend.service.events.impl;
 
-import com.example.emsbackend.commons.enums.StatusCode;
+import com.example.emsbackend.commons.enums.https.StatusCode;
 import com.example.emsbackend.commons.status.Message;
 import com.example.emsbackend.criteria_utils.searching.ProjectEntitySearchCriteria;
-import com.example.emsbackend.criteria_utils.searching.SearchCriteria;
 import com.example.emsbackend.criteria_utils.searching.impl.ProjectEntitySearchImpl;
 import com.example.emsbackend.dto.events.getDTO.GetIdentifiersDTO;
 import com.example.emsbackend.dto.events.getDTO.ProjectEntityGetObjectDTO;
@@ -21,7 +20,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Date;
 import java.util.HashSet;

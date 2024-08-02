@@ -1,7 +1,7 @@
 package com.example.emsbackend.commons.status;
 
 
-import com.example.emsbackend.commons.enums.StatusCode;
+import com.example.emsbackend.commons.enums.https.StatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

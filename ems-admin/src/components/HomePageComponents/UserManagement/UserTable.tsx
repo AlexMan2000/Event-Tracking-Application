@@ -3,6 +3,8 @@ import ProTable from '@ant-design/pro-table';
 import { Button, message } from 'antd';
 import axios from 'axios';
 import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
+import { getAllUsers } from '../../../services/users/userService';
+
 
 const UserTable = () => {
   const columns = [
@@ -124,22 +126,7 @@ const UserTable = () => {
   return (
     <ProTable
       columns={columns}
-      request={async (params, sorter, filter) => {
-        // localhost doesn't support https request, use http instead
-            const res = await axios.get('http://127.0.0.1:8083/users/all', {
-              params: {
-                ...params,
-                sorter: sorter && Object.keys(sorter).length ? sorter : null,
-                filter,
-              },
-            });
-            console.log(res.data);
-            return {
-              data: res.data.length != 0 ? res.data: [],
-              success: true,
-              total: parseInt(res.headers['x-total-count'], 10),
-            };
-        }}
+      request={getAllUsers}
       rowKey="id"
       dateFormatter="string"
       headerTitle="用户管理"

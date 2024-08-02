@@ -1,6 +1,6 @@
 package com.example.emsbackend.controller.events;
 
-import com.example.emsbackend.commons.enums.StatusCode;
+import com.example.emsbackend.commons.enums.https.StatusCode;
 import com.example.emsbackend.commons.status.Message;
 import com.example.emsbackend.criteria_utils.searching.ParameterEntitySearchCriteria;
 import com.example.emsbackend.dto.events.getDTO.GetIdentifiersDTO;
@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/parameters")

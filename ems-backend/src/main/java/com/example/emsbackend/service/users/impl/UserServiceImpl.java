@@ -11,6 +11,7 @@ import com.example.emsbackend.service.users.UserService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
         this.roleService = roleService;
         this.userEntitySearchImpl = userEntitySearchImpl;
     }
+
 
     @Override
     public List<UserEntityDTO> getUserDTOByFilter(UserEntitySearchCriteria userEntitySearchCriteria) {

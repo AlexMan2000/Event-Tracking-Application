@@ -1,5 +1,6 @@
 package com.example.emsbackend.entity.users;
 
+import com.example.emsbackend.commons.enums.auths.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -17,6 +18,9 @@ import java.util.List;
  */
 @Entity
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "user")
 public class UserEntity implements UserDetails {
 
@@ -27,8 +31,8 @@ public class UserEntity implements UserDetails {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "roleId")
-    private Long roleId;
+//    @Column(name = "roleId")
+//    private Long roleId;
 
     @Column(name = "firstName", length = 50)
     private String firstName;
@@ -62,9 +66,10 @@ public class UserEntity implements UserDetails {
     @Column(name = "profile", columnDefinition = "TEXT")
     private String profile;
 
-    @OneToOne
-    @JoinColumn(name="role_id")
-    private RoleEntity role;
+//    @OneToOne
+//    @JoinColumn(name="roleId")
+    @Column(name = "roleId")
+    private Long roleId;
 
     /**
      * List of roles that a user has, default to be one role associated with each user
@@ -72,7 +77,8 @@ public class UserEntity implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.getSlug()));
+
+        return List.of(new SimpleGrantedAuthority(Role.fromId(roleId)));
     }
 
     @Override
@@ -87,17 +93,17 @@ public class UserEntity implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     /**

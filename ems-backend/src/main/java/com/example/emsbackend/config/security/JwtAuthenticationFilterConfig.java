@@ -1,9 +1,6 @@
 package com.example.emsbackend.config.security;
 
-import com.example.emsbackend.dto.users.UserEntityDTO;
-import com.example.emsbackend.entity.users.UserEntity;
-import com.example.emsbackend.jwt.JwtService;
-import com.example.emsbackend.service.users.UserService;
+import com.example.emsbackend.service.jwt.impl.JwtServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +28,7 @@ public class JwtAuthenticationFilterConfig extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private JwtService jwtService;
+    private JwtServiceImpl jwtServiceImpl;
 
 
     /**
@@ -59,12 +56,12 @@ public class JwtAuthenticationFilterConfig extends OncePerRequestFilter {
         token = authHeader.substring(7);
 
         // 2. Get user information
-        String userEmail = jwtService.extractUserEmail(token);
+        String userEmail = jwtServiceImpl.extractUserEmail(token);
         // 2.1 Does this user exist in the database
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             // 2.2 Check token validity
-            if (jwtService.isTokenValid(token, userDetails)) {
+            if (jwtServiceImpl.isTokenValid(token, userDetails)) {
                 // Needed by springboot and spring security.
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,

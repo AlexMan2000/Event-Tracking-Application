@@ -1,4 +1,4 @@
-package com.example.emsbackend.commons.enums;
+package com.example.emsbackend.commons.enums.https;
 
 public enum StatusCode {
     OK(200),

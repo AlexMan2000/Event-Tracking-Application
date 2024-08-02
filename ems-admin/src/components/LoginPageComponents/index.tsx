@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Button, Checkbox, Modal,Card} from 'antd';
 import { useNavigate} from 'react-router-dom';
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../store/authHook";
+import { handleLogin, checkAuthStatus } from "../../services/auth/authThunk";
+import { RootState } from "../../store/store";
 
 // import 'antd/dist/antd.css';
 import "./index.css"
 import axios from 'axios';
+import { LoginCredentials } from "../../services/auth/authService";
 
 async function hashPasswordSHA256(password) {
   const encoder = new TextEncoder();
@@ -20,29 +25,42 @@ const LoginPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loginForm] = Form.useForm();
   const [registerForm] = Form.useForm();
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const dispatch = useAppDispatch();
+  
+
+  // Get logged in information
+  useEffect(() => {
+    const token =  localStorage.getItem("token");
+    if (token) {
+      dispatch(checkAuthStatus({token: token}))
+    }
+    
+  }, [dispatch]);
 
 
-  const onLoginFinish = (values) => {
-    hashPasswordSHA256(values["password"]).then(hashedPassword => {
-      axios.get("http://127.0.0.1:8083/login/user", 
-      {
-        email: values["email"],
-        passwordHash: hashedPassword
-      }
-      , 
-      {
-        timeout: 5000
-      }).then(response => {
-        if (response.status === 200) {
-          // 跳转到主界面
-          navigate("/home")
-        } else {
-          console.log(response);
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/home');
+    }
+  }, [isAuthenticated, navigate]);
+
+
+  const onLoginFinish = async (values: LoginCredentials) => {
+      const credentials: LoginCredentials = values;
+      dispatch(handleLogin(credentials)).then(
+        response => {
+          if (response.status = 200) {
+            navigate("/home");
+          }
         }
-      })
-    })
-    loginForm.resetFields();
+      ).catch(error => {
+        setError(true);
+      }
+    )
+    // loginForm.resetFields();
   };
 
   const onLoginFinishFailed = (errorInfo) => {
@@ -52,7 +70,8 @@ const LoginPage = () => {
   const onRegisterFinish = (values) => {
     hashPasswordSHA256(values["password"]).then(hashedPassword => {
       axios.post("http://127.0.0.1:8083/users/register", 
-      {"passwordHash": hashedPassword
+      {
+        "passwordHash": hashedPassword
         ,...values
       }
       , 
@@ -68,18 +87,30 @@ const LoginPage = () => {
     console.log('Failed:', errorInfo);
   };
 
-  const showModal = () => {
+  const showRegisterModal = () => {
     setIsModalVisible(true);
   };
 
-  const handleOk = (e) => {
+  const handleRegisterModalOk = (e) => {
     registerForm.resetFields();
     setIsModalVisible(false);
   };
 
 
+  const showErrorModal = () => {
+    setError(true);
+  };
+  const handleErrorOk = () => {
+    setError(false);
+  };
+
+  const handleErrorCancel = () => {
+    setError(false);
+  };
+
+
   // When user click x or 遮罩层时触发
-  const handleCancel = () => {
+  const handleRegisterModalCancel = () => {
     registerForm.resetFields();
     setIsModalVisible(false);
   };
@@ -89,6 +120,21 @@ const LoginPage = () => {
         <div className="login-header-line">
           <h2>Login</h2>
         </div>
+        <Modal
+        open={error}
+        title="Title"
+        onOk={handleErrorOk}
+        onCancel={handleErrorCancel}
+        footer={(_, { OkBtn, CancelBtn }) => (
+          <>
+            <Button>Custom Button</Button>
+            <CancelBtn />
+            <OkBtn />
+          </>
+        )}
+      >
+        Username and password mismatch!
+      </Modal>
       <Form
         className="login-form"
         form={loginForm}
@@ -100,9 +146,9 @@ const LoginPage = () => {
       >
         <Form.Item
           label="Email"
-          name="username"
+          name="email"
           rules={[
-            { required: true, message: 'Please input your username!' 
+            { required: true, message: 'Please input your email!' 
             }
           ]}
         >
@@ -128,10 +174,10 @@ const LoginPage = () => {
 
       </Form>
       <div className = "register-button-container">
-          <div className = "register-button" type="link" onClick={showModal}>
+          <div className = "register-button" type="link" onClick={showRegisterModal}>
           <h6>Register</h6></div>
         </div>
-      <Modal title="User Registration" open={isModalVisible} footer={null} onOk={handleOk} onCancel={handleCancel} >
+      <Modal title="User Registration" open={isModalVisible} footer={null} onOk={handleRegisterModalOk} onCancel={handleRegisterModalCancel} >
         <Form
           name="register"
           form={registerForm}
