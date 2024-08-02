@@ -9,6 +9,13 @@ export interface LoginCredentials {
 export interface RegisterCredentials {
     email: string;
     password: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    mobile: string;
+    intro: string;
+    profile: string;
+    profileImage: any;
 }
 
 export interface AuthenticateCredentials {

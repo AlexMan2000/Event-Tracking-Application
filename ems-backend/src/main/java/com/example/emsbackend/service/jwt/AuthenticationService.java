@@ -11,4 +11,8 @@ public interface AuthenticationService {
     LoginResponse login(LoginRequest request);
 
     AuthenticationResponse authenticate(AuthenticationRequest request);
+
+    AuthenticationResponse logout(AuthenticationRequest request);
+
+
 }

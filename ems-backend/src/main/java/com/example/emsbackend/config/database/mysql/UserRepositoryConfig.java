@@ -1,4 +1,4 @@
-package com.example.emsbackend.config.database;
+package com.example.emsbackend.config.database.mysql;
 
 
 import jakarta.persistence.EntityManagerFactory;

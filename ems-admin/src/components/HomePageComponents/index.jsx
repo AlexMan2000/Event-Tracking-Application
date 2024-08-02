@@ -2,8 +2,6 @@ import UserManagementIndex from './UserManagement';
 import EventManagementIndex from './EventTrackingManagement';
 import ChattingRoomIndex from './ChattingRoom';
 import PhotoSharingPage from './PhotoSharing';
-
-import TestForm from './TestForm';
 import React, { useState } from 'react';
 
 import {
@@ -43,9 +41,9 @@ function HomePage() {
           <ProjectManagementIndex setMenuIndex={setMenuIndex} databaseName={"project"}/>,
           <ModuleManagementIndex setMenuIndex={setMenuIndex} databaseName={"module"}/>,
           <PageManagementIndex setMenuIndex={setMenuIndex} databaseName={"page"}/>,
-          <ChattingRoomIndex/>,  
-          <PhotoSharingPage/>,
-          <TestForm/>
+        //   <ChattingRoomIndex/>,  
+        //   <PhotoSharingPage/>,
+        //   <TestForm/>
         ]
     const labels = ["User Management",
          "Event Management", 

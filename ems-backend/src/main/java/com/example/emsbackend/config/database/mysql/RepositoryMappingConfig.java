@@ -1,4 +1,4 @@
-package com.example.emsbackend.config.database;
+package com.example.emsbackend.config.database.mysql;
 
 import com.example.emsbackend.repository.events.entityRepository.*;
 import org.springframework.beans.factory.annotation.Autowired;

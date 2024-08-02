@@ -44,6 +44,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
+                .lastName(request.getMiddleName())
+                .intro(request.getIntro())
+                .profile(request.getProfile())
                 .roleId(3L)
                 .build();
 
@@ -71,7 +74,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         request.getPassword()
                 )
         );
-        System.out.println("after auth");
 
         Date nowTime = new Date();
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -88,6 +90,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) throws AuthenticationException {
+        var token = request.getToken();
+        String email = jwtServiceImpl.extractUserEmail(token);
+        UserEntity userEntityByEmail = userEntityRepository.findUserEntityByEmail(email);
+        return AuthenticationResponse.builder()
+                .token(token)
+                .userInfo(this.modelMapper.map(userEntityByEmail, UserEntityDTO.class))
+                .build();
+    }
+
+
+    @Override
+    public AuthenticationResponse logout(AuthenticationRequest request) throws AuthenticationException {
         var token = request.getToken();
         String email = jwtServiceImpl.extractUserEmail(token);
         UserEntity userEntityByEmail = userEntityRepository.findUserEntityByEmail(email);

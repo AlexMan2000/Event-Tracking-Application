@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -36,13 +34,14 @@ public class SecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/events/**").permitAll()
-//                        .requestMatchers("/users/**").permitAll()
-                        .requestMatchers("/projects/**").permitAll()
-                        .requestMatchers("/pages/**").permitAll()
-                        .requestMatchers("/modules/**").permitAll()
-                        .requestMatchers("/parameters/**").permitAll()
+                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/events/**").permitAll()
+//                              .requestMatchers("/users/**").permitAll()
+                                .requestMatchers("/projects/**").permitAll()
+                                .requestMatchers("/pages/**").permitAll()
+                                .requestMatchers("/modules/**").permitAll()
+                                .requestMatchers("/parameters/**").permitAll()
+                                .requestMatchers("/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

@@ -39,4 +39,6 @@ const authSlice = createSlice({
 // that can be passed to the dispatch function.
 export const { login, logout } = authSlice.actions;
 
+
+// Reducer object, used to configure store
 export default authSlice.reducer;

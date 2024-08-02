@@ -6,6 +6,8 @@ import { authenticateService, loginService, registerService } from './authServic
 import { LoginCredentials, RegisterCredentials, AuthenticateCredentials } from './authService';
 import { setUserInfo, clearUserInfo, UserState } from "../../store/slice/userSlice";
 
+
+
 export const handleLogin = (credentials: LoginCredentials) => {
     // Async Actions syntax
     return async (dispatch: AppDispatch) => {
@@ -31,8 +33,14 @@ export const handleRegister = () => {
 }
 
 
+
+
+
 export const handleLogout = () => {
-  
+  return async (dispatch: AppDispatch) => {
+    localStorage.clear();
+    dispatch(logout());
+  };
 }
 
 // check authentication status

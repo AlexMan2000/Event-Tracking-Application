@@ -66,10 +66,12 @@ public class UserEntity implements UserDetails {
     @Column(name = "profile", columnDefinition = "TEXT")
     private String profile;
 
-//    @OneToOne
-//    @JoinColumn(name="roleId")
     @Column(name = "roleId")
     private Long roleId;
+
+
+    @Column(name = "profile_image")
+    private byte[] profileImage;
 
     /**
      * List of roles that a user has, default to be one role associated with each user

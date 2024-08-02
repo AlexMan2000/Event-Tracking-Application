@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
-import { Avatar, Dropdown, Menu, Tooltip } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { Avatar, Dropdown, Menu, Tooltip, message } from 'antd';
+import { UserOutlined, SmileOutlined } from '@ant-design/icons';
 import { useAppDispatch } from '../../../../store/authHook';
+import { useNavigate} from 'react-router-dom';
+import { handleLogout } from '../../../../services/auth/authThunk';
+
 
 const InteractiveAvatar = () => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const useDispatch = useAppDispatch();  
+  const dispatch = useAppDispatch();  
+  const navigate = useNavigate();
+
 
   const handleMenuClick = (e) => {
     console.log(e.key, 'clicked');
     if (e.key === 'logout') {
       // handle logout
-
+      dispatch(handleLogout());
+      message.success('GoodBye!');
+      
     }
     if (e.key === 'profile') {
       // handle profile
@@ -36,6 +43,7 @@ const InteractiveAvatar = () => {
   );
 
   return (
+    <>
     <Dropdown
       overlay={menu}
       trigger={['click']}
@@ -54,7 +62,7 @@ const InteractiveAvatar = () => {
           icon={<UserOutlined />}
         />
       </Tooltip>
-    </Dropdown>
+    </Dropdown></>
   );
 };
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Button, Checkbox, Modal,Card} from 'antd';
+import { Form, Input, Button, Checkbox, Modal,Card, Upload, Image, message} from 'antd';
 import { useNavigate} from 'react-router-dom';
+import { PlusOutlined } from '@ant-design/icons';
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/authHook";
 import { handleLogin, checkAuthStatus } from "../../services/auth/authThunk";
@@ -18,7 +19,13 @@ async function hashPasswordSHA256(password) {
   return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-
+const getBase64 = (file: any) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 
 const LoginPage = () => {
@@ -26,6 +33,9 @@ const LoginPage = () => {
   const [loginForm] = Form.useForm();
   const [registerForm] = Form.useForm();
   const [error, setError] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [fileList, setFileList] = useState([]);
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const dispatch = useAppDispatch();
@@ -42,6 +52,7 @@ const LoginPage = () => {
 
 
   useEffect(() => {
+    // Is logged in
     if (isAuthenticated) {
       navigate('/home');
     }
@@ -53,6 +64,7 @@ const LoginPage = () => {
       dispatch(handleLogin(credentials)).then(
         response => {
           if (response.status = 200) {
+            message.success("Welcome!")
             navigate("/home");
           }
         }
@@ -109,11 +121,52 @@ const LoginPage = () => {
   };
 
 
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  };
+
+
+  const handleChange = ({ fileList: newFileList }) => 
+    setFileList(newFileList);
+
+  const uploadButton = (
+    <button
+      style={{
+        border: 0,
+        background: 'none',
+        marginTop: 15,
+      }}
+      type="button"
+    >
+      <PlusOutlined style={{
+        // backgroundColor: "black",
+        color: "black"
+      }}/>
+      <div
+        style={{
+          marginTop: 8,
+          color: "black"
+        }}
+      >
+        Upload
+      </div>
+      sss
+    </button>
+  );
+
   // When user click x or 遮罩层时触发
   const handleRegisterModalCancel = () => {
     registerForm.resetFields();
     setIsModalVisible(false);
   };
+
+  // function handleUpload(): void {
+    
+  // }
 
   return (
     <div className="login-container">
@@ -224,12 +277,40 @@ const LoginPage = () => {
           <Form.Item label="Profile" name="profile">
             <Input.TextArea />
           </Form.Item>
+          <>
+            <Upload
+                action={""}
+                accept={"image/png, image/jpeg"}
+                listType="picture-circle"
+                fileList={fileList}
+                onPreview={handlePreview}
+                onChange={handleChange}
+                // customRequest={handleUpload}
+              >
+              {uploadButton}
+            </Upload>
+            {previewImage && (
+              <Image
+                wrapperStyle={{
+                  display: 'none',
+                }}
+                preview={{
+                  visible: previewOpen,
+                  onVisibleChange: (visible) => setPreviewOpen(visible),
+                  afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                }}
+                src={previewImage}
+              />
+            )}
+            
+            </>
           <div className = "login-button-container">
           <button className = "login-button" type="submit">
           <h3>REGISTER</h3></button>
         </div>
             
         </Form>
+        
       </Modal>
     </div>
   );
