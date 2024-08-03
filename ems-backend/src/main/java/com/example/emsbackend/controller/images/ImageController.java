@@ -36,7 +36,7 @@ public class ImageController {
     }
 
 
-    @GetMapping("/get/{id}/{preview}")
+    @GetMapping("/{id}/{preview}")
     public ResponseEntity<byte[]> getImage(@PathVariable String id, @PathVariable String preview) {
 
 

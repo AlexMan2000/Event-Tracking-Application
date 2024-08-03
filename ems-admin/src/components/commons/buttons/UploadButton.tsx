@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload, message } from 'antd';
 import axios, { AxiosProgressEvent } from 'axios';
-import { getUploadImageUrl } from '../../../apis/uploadApi';
+import { getUploadImageUrl } from '../../../apis/imageApi';
 
 
 const getBase64 = (file) =>
@@ -40,13 +40,8 @@ const UploadButton = (props: any) => {
   const customRequest = async ({ file, onSuccess, onError, onProgress }) => {
     const formData = new FormData();
 
-
-
     // file is binary
     formData.append('file', file);
-    
-
-    console.log(file)
 
     try {
       const response = await axios.post(getUploadImageUrl(), formData, {
@@ -60,7 +55,6 @@ const UploadButton = (props: any) => {
         },
       });
 
-      console.log(response.data)
       setProfileImageMetadata({imageName: file.name, contenType: file.type, imageId: response.data})
       onSuccess(response.data, file);
       message.success(`${file.name} file uploaded successfully.`);

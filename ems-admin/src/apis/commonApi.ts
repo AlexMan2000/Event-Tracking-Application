@@ -14,3 +14,4 @@ export const getRequestBaseUrlApi = (propName: entityNameInterface) => {
 export const getByIdApi = (id: number, propName: entityNameInterface) => {
     return `${SERVER_BASE}/${propName}s/${id}`
 }
+

@@ -4,14 +4,26 @@ import { UserOutlined, SmileOutlined } from '@ant-design/icons';
 import { useAppDispatch } from '../../../../store/authHook';
 import { useNavigate} from 'react-router-dom';
 import { handleLogout } from '../../../../services/auth/authThunk';
-
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../../../store/slice/userSlice';
+import { selectAuthentication } from '../../../../store/slice/authSlice';
+import { getProfileImageUrl } from '../../../../apis/imageApi';
 
 const InteractiveAvatar = () => {
+
+
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dispatch = useAppDispatch();  
   const navigate = useNavigate();
 
+  const userInfo: any = useSelector(selectUser)
+  const isAuthenticated = useSelector(selectAuthentication)
+
+  const imageUrl = userInfo.profileImageId;
+  console.log(getProfileImageUrl(userInfo.profileImageId))
+
+  console.log(userInfo);
 
   const handleMenuClick = (e) => {
     console.log(e.key, 'clicked');
@@ -42,6 +54,18 @@ const InteractiveAvatar = () => {
     </Menu>
   );
 
+
+  const displayName = (isAuthenticated: boolean, userInfo: any) => {
+    if (isAuthenticated) {
+      if (userInfo.length == 0) {
+        return "Nobody"
+      }
+      return userInfo.firstName.charAt(0).toUpperCase();
+    }
+    return <UserOutlined></UserOutlined>
+  }
+  
+
   return (
     <>
     <Dropdown
@@ -59,8 +83,12 @@ const InteractiveAvatar = () => {
         <Avatar
           size={48} // Adjust the size as needed
           style={{ cursor: 'pointer' }}
-          icon={<UserOutlined />}
-        />
+          // icon={<UserOutlined />}
+          src = {getProfileImageUrl(userInfo.profileImageId)}
+        >{
+          !imageUrl && displayName(isAuthenticated, userInfo)
+        }
+        </Avatar>
       </Tooltip>
     </Dropdown></>
   );

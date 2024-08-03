@@ -12,6 +12,7 @@ export interface UserState {
   mobile: string | null;
   intro: string | null;
   profile: any | null;
+  profileImageId: string | null;
 }
 
 
@@ -23,6 +24,7 @@ const initialState: UserState = {
   mobile: "",
   intro: "",
   profile: "",
+  profileImageId: ""
 };
 
 export const userSlice = createSlice({
@@ -34,9 +36,10 @@ export const userSlice = createSlice({
       state.firstName = action.payload.firstName;
       state.middleName = action.payload.middleName;
       state.lastName = action.payload.lastName;
-      state.mobile = state.mobile;
-      state.intro = state.intro;
-      state.profile = state.profile;
+      state.mobile = action.payload.mobile;
+      state.intro = action.payload.intro;
+      state.profile = action.payload.profile;
+      state.profileImageId = action.payload.profileImageId;
     },
     clearUserInfo: (state) => {
       state.email = null;
@@ -46,6 +49,7 @@ export const userSlice = createSlice({
       state.mobile = null;
       state.intro = null;
       state.profile = null;
+      state.profileImageId = null;
     },
   },
 });

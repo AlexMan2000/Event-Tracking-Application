@@ -71,6 +71,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
 
+        // 2. Insert user into mysql DB
         var user = UserEntity.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())

@@ -1,6 +1,7 @@
 // features/auth/authSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 import { UserState } from './userSlice';
+import { RootState } from '../store';
 
 export interface AuthState {
     isAuthenticated: boolean | false,
@@ -39,6 +40,7 @@ const authSlice = createSlice({
 // that can be passed to the dispatch function.
 export const { login, logout } = authSlice.actions;
 
+export const selectAuthentication = (state: RootState) => state.auth.isAuthenticated;
 
 // Reducer object, used to configure store
 export default authSlice.reducer;
