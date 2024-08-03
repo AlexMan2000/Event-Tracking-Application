@@ -4,19 +4,30 @@ import { useNavigate} from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/authHook";
-import { handleLogin, checkAuthStatus } from "../../services/auth/authThunk";
+import { handleLogin, checkAuthStatus, handleRegister } from "../../services/auth/authThunk";
 import { RootState } from "../../store/store";
+import { validationService } from "../../services/auth/authService";
+import { copyFromObjToForm } from "../commons/utils/objectHandlers";
 
 // import 'antd/dist/antd.css';
 import "./index.css"
 import axios from 'axios';
 import { LoginCredentials } from "../../services/auth/authService";
+import UploadButton from "../commons/buttons/UploadButton";
 
 async function hashPasswordSHA256(password) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
   const hash = await crypto.subtle.digest('SHA-256', data);
   return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+
+const validateEmail = (email:string) => {
+  return emailRegex.test(email);
 }
 
 const getBase64 = (file: any) =>
@@ -33,9 +44,7 @@ const LoginPage = () => {
   const [loginForm] = Form.useForm();
   const [registerForm] = Form.useForm();
   const [error, setError] = useState(false);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [fileList, setFileList] = useState([]);
+  const [profileImageMetadata, setProfileImageMetadata] = useState<any>({imageName: "", contentType:"", imageId: null});
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const dispatch = useAppDispatch();
@@ -79,19 +88,14 @@ const LoginPage = () => {
     console.log('Failed:', errorInfo);
   };
 
-  const onRegisterFinish = (values) => {
-    hashPasswordSHA256(values["password"]).then(hashedPassword => {
-      axios.post("http://127.0.0.1:8083/users/register", 
-      {
-        "passwordHash": hashedPassword
-        ,...values
-      }
-      , 
-      {
-        timeout: 5000
-      })
-    })
+  const onRegisterFinish = (values: any) => {
+    
+    console.log(values);
+    const formData = {...values, profileImageMetadata}
+    console.log(formData);
+    dispatch(handleRegister(formData))
     registerForm.resetFields();
+    setProfileImageMetadata({imageName: "", contentType:"", imageId: null});
     setIsModalVisible(false);
   };
 
@@ -120,18 +124,6 @@ const LoginPage = () => {
     setError(false);
   };
 
-
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-  };
-
-
-  const handleChange = ({ fileList: newFileList }) => 
-    setFileList(newFileList);
 
   const uploadButton = (
     <button
@@ -164,9 +156,9 @@ const LoginPage = () => {
     setIsModalVisible(false);
   };
 
-  // function handleUpload(): void {
+  function handleUpload() {
     
-  // }
+  }
 
   return (
     <div className="login-container">
@@ -253,22 +245,29 @@ const LoginPage = () => {
           <Form.Item label="Email" name="email" 
             rules={
               [ 
-                 { validator: (_, value) => value ? 
-                   axios.get(`http://127.0.0.1:8083/users/search/${value}`).then(response=>{
-                    console.log(response);
-                      if (response.data === "") {
-                        return Promise.resolve();
-                      } else {
-                        return Promise.reject("This email has been registered");
-                      }
-                   })
-                 : Promise.reject("Email field cannot be empty")
+                 { 
+                  required: true,
+                  validator: async (_, value) => value ? 
+                    validateEmail(value) ?
+                    validationService({email: value}).then(
+                    response=>{
+                      console.log(response);
+                        if (response.okToAdd) {
+                          return Promise.resolve();
+                        } else {
+                          return Promise.reject("This email has been registered");
+                        }
+                     }
+                  )
+                 : Promise.reject("Wrong Format!")
+                 : Promise.reject("Email field cannot be empty!")
                  }
               ]
             }>
             <Input />
           </Form.Item>
-          <Form.Item label="Password" name="password" rules={[{ required: true }]}>
+          <Form.Item label="Password" name="password" rules={[{ required: true }]}
+          >
             <Input.Password />
           </Form.Item>
           <Form.Item label="Intro" name="intro">
@@ -277,33 +276,10 @@ const LoginPage = () => {
           <Form.Item label="Profile" name="profile">
             <Input.TextArea />
           </Form.Item>
-          <>
-            <Upload
-                action={""}
-                accept={"image/png, image/jpeg"}
-                listType="picture-circle"
-                fileList={fileList}
-                onPreview={handlePreview}
-                onChange={handleChange}
-                // customRequest={handleUpload}
-              >
-              {uploadButton}
-            </Upload>
-            {previewImage && (
-              <Image
-                wrapperStyle={{
-                  display: 'none',
-                }}
-                preview={{
-                  visible: previewOpen,
-                  onVisibleChange: (visible) => setPreviewOpen(visible),
-                  afterOpenChange: (visible) => !visible && setPreviewImage(''),
-                }}
-                src={previewImage}
-              />
-            )}
-            
-            </>
+          <Form.Item label="Profile Image" name="profileImageId">
+            <UploadButton visible = {isModalVisible} setProfileImageMetadata={setProfileImageMetadata}></UploadButton>
+          </Form.Item>
+          
           <div className = "login-button-container">
           <button className = "login-button" type="submit">
           <h3>REGISTER</h3></button>

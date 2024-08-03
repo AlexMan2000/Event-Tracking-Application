@@ -15,7 +15,7 @@ export interface RegisterCredentials {
     mobile: string;
     intro: string;
     profile: string;
-    profileImage: any;
+    profileImageId: string;
 }
 
 export interface AuthenticateCredentials {
@@ -32,7 +32,6 @@ export interface LoginResponse {
 
 
 export interface RegisterResponse {
-    token: string;
 }
 
 
@@ -41,6 +40,14 @@ export interface AuthenticateResponse {
     userInfo: any;
 }
 
+
+export interface ValidationCredentials {
+    email: string;
+}
+
+export interface ValidationResponse {
+    okToAdd: boolean;
+}
 
 
 export const loginService = async (credentials: LoginCredentials): Promise<LoginResponse> => {
@@ -59,3 +66,9 @@ export const registerService = async (credentials: RegisterCredentials): Promise
     const response = await axiosInstance.post<RegisterResponse>("/auth/register", credentials);
     return response.data;
 };
+
+
+export const validationService = async (credentials: ValidationCredentials): Promise<ValidationResponse> => {
+    const response = await axiosInstance.post<ValidationResponse>("/auth/check-email-validity", credentials);
+    return response.data;
+}

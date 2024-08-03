@@ -69,9 +69,9 @@ public class UserEntity implements UserDetails {
     @Column(name = "roleId")
     private Long roleId;
 
+    @Column(name = "profile_image_id")
+    private String profileImageId;
 
-    @Column(name = "profile_image")
-    private byte[] profileImage;
 
     /**
      * List of roles that a user has, default to be one role associated with each user

@@ -25,6 +25,6 @@ public class ImageRepositoryConfig {
 
     @Bean
     public GridFsTemplate gridFsTemplate(MongoDatabaseFactory mongoDatabaseFactory, MappingMongoConverter mongoConverter) {
-        return new GridFsTemplate(mongoDatabaseFactory, mongoConverter);
+        return new GridFsTemplate(mongoDatabaseFactory, mongoConverter, "images");
     }
 }

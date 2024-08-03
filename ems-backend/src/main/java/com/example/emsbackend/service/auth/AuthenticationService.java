@@ -1,4 +1,4 @@
-package com.example.emsbackend.service.jwt;
+package com.example.emsbackend.service.auth;
 
 
 import com.example.emsbackend.dto.auths.*;
@@ -6,7 +6,7 @@ import com.example.emsbackend.dto.auths.*;
 
 public interface AuthenticationService {
 
-    AuthenticationResponse register(RegisterRequest request);
+    RegisterResponse register(RegisterRequest request);
 
     LoginResponse login(LoginRequest request);
 
@@ -14,5 +14,6 @@ public interface AuthenticationService {
 
     AuthenticationResponse logout(AuthenticationRequest request);
 
+    ValidationResponse checkEmail(ValidationRequest request);
 
 }

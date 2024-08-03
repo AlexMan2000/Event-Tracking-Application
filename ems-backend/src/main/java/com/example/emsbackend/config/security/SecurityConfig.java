@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 .requestMatchers("/modules/**").permitAll()
                                 .requestMatchers("/parameters/**").permitAll()
                                 .requestMatchers("/images/**").permitAll()
+                                .requestMatchers("/uploads/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

@@ -1,6 +1,6 @@
 import { AppDispatch, RootState } from '../../store/store';
 import { login, logout, AuthState } from '../../store/slice/authSlice';  // Action creators
-import { decodeToken } from '../../utils/decodeToken';
+import { decodeToken } from '../../components/commons/utils/decodeToken';
 import { useSelector  } from 'react-redux';
 import { authenticateService, loginService, registerService } from './authService';
 import { LoginCredentials, RegisterCredentials, AuthenticateCredentials } from './authService';
@@ -28,8 +28,10 @@ export const handleLogin = (credentials: LoginCredentials) => {
 };
 
 
-export const handleRegister = () => {
-
+export const handleRegister = (formData: RegisterCredentials) => {
+  return async (dispatch: AppDispatch) => {
+    await registerService(formData);
+  }
 }
 
 

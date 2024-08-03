@@ -1,6 +1,6 @@
 package com.example.emsbackend.config.security;
 
-import com.example.emsbackend.service.jwt.impl.JwtServiceImpl;
+import com.example.emsbackend.service.auth.impl.JwtServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

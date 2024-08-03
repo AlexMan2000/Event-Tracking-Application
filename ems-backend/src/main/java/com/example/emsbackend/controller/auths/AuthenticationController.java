@@ -1,7 +1,7 @@
 package com.example.emsbackend.controller.auths;
 
 import com.example.emsbackend.dto.auths.*;
-import com.example.emsbackend.service.jwt.AuthenticationService;
+import com.example.emsbackend.service.auth.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<RegisterResponse> register(
             @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authenticationService.register(request));
     }
@@ -43,5 +43,13 @@ public class AuthenticationController {
             e.printStackTrace();
         }
         return ResponseEntity.internalServerError().build();
+    }
+
+
+    @PostMapping("/check-email-validity")
+    public ResponseEntity<ValidationResponse> checkEmailValidity(@RequestBody ValidationRequest request) {
+        ValidationResponse validationResponse = authenticationService.checkEmail(request);
+
+        return ResponseEntity.status(200).body(validationResponse);
     }
 }

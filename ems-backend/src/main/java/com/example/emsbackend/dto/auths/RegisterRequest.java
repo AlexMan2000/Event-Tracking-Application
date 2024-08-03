@@ -19,4 +19,7 @@ public class RegisterRequest {
     private String password;
     private String intro;
     private String profile;
+
+
+    private ProfileImageMetadata profileImageMetadata;
 }

@@ -1,8 +1,8 @@
-package com.example.emsbackend.service.jwt.impl;
+package com.example.emsbackend.service.auth.impl;
 
 import com.example.emsbackend.dto.users.UserEntityDTO;
 import com.example.emsbackend.entity.users.UserEntity;
-import com.example.emsbackend.service.jwt.JwtService;
+import com.example.emsbackend.service.auth.JwtService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

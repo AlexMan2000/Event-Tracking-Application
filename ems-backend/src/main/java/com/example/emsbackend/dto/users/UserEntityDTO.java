@@ -23,7 +23,5 @@ public class UserEntityDTO {
     private Date lastLogin;
     private String intro;
     private String profile;
-    private byte[] profileImage;
-
-
+    private String profileImageId;
 }
