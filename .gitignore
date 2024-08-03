@@ -73,7 +73,7 @@ spring-boot-devtools.properties
 
 # Static assets
 /static/
-README.assets/
+# README.assets/
 
 # Temporary files
 *.swp
