@@ -1,25 +1,12 @@
 # 埋点管理系统设计
 
-# 数据库设计
-
-![image-20240727155138352](./README.assets/database_schema.png)
-
-- Project和Module之间存在多对多关系
-- Module和Page之间存在多对多关系
-- Page和Event之间存在多对多关系
-- Project, Module, Page, Event和Parameter之间均存在多对多关系
-
-
-
-
-
-
-
 # 后端设计
 
-后端使用Java + Spring + Jpa实现
+后端使用Spring Boot 3 + Spring Security 6 + JPA + Mongoose + Lettuce实现
 
-## Controller层
+## MVC 设计
+
+### Controller层
 
 每个对象提供下列五个路由:
 
@@ -34,7 +21,7 @@
 
 
 
-## Service层
+### Service层
 
 **Service为每个对象提供五个方法, 和Controller层对应**
 
@@ -62,18 +49,56 @@ Message updateEntity(EntityUpdateObjectDTO entityUpdateObjectDTO);
 
 
 
-## Persistence层
+### Persistence层
 
-`Persistence`为每个对象提供两类抽象:
+#### MySQL 数据库
 
-- `EntityRepository`: 用于处理增删改查
-- `Entity1Entity2MappingRepository`用于处理多对多关系
+![image-20240727155138352](./README.assets/database_schema.png)
+
+- Project和Module之间存在多对多关系
+- Module和Page之间存在多对多关系
+- Page和Event之间存在多对多关系
+- Project, Module, Page, Event和Parameter之间均存在多对多关系
+
+
+
+MySQL数据库用于保存所有的管理对象信息，包括参数，事件， 页面，模组，项目对象。
+
+`Spring JPA`为每个对象提供两类抽象:
+
+- `EntityRepository`: 用于处理增删改查， 参数，事件， 页面，模组，项目对象拥有自己的`EntityRepository`。
+- `Entity1Entity2MappingRepository`用于处理多对多关系， 参数 <-> 事件，事件 <-> 页面，页面 <-> 模组，模组 <-> 项目的连表关系拥有自己的`Entity1Entity2MappingRepository`
+
+
+
+
+
+#### MongoDB数据库
+
+MongoDB 用于持久化储存用户提交的个人信息头像图片， imageId保存在`MySQL`中用于在`login`时查询。
+
+
+
+
+
+#### Redis数据库
+
+ResdisDB 用于储存用户注册时提交的个人信息头像图片，缓存在内存中, 用于图片预览。
 
 
 
 
 
 
+
+## Security 设计
+
+登录认证采用`stateless token-based authentication`, 使用`Jwt Token`实现。
+
+- 用户登录时产生`token`, 返回给用户保存在前端
+- 用户后续访问`protectedroutes`时在请求头中带上`Authorization: Bearer token`
+  - 认证成功`status code: 200`
+  - 认证失败`status code: 401`
 
 
 
@@ -81,7 +106,73 @@ Message updateEntity(EntityUpdateObjectDTO entityUpdateObjectDTO);
 
 # 前端设计
 
-前端使用React + Vite +Typescript实现
+前端使用React + Redux + Router +  Axios + Antd + Vite + Typescript +  Javascript实现
+
+## 用户登录认证
+
+使用React-Redux实现
+
+- 用户登录经过后端认证以后将返回的`token`保存在`localStorage`中
+- 用户发送的任何需要权限认证的请求都会经过`axios`拦截器，添加请求头`Authroization: Bearer token`
+- 用户信息会被保存在全局的`store`对象中
+
+
+
+
+
+## 路由结构
+
+```jsx
+<Router>
+  <Routes>
+      <Route path="/" element={<Navigate replace to="/login" />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/home" element={<ProtectedRoute element={<HomePage />} />} />
+  </Routes>
+</Router>  
+```
+
+- `ProtectedRoute`是需要认证的页面
+
+
+
+
+
+## 内容展示
+
+定义公共组件`EditableTable`用于管理数据对象和对象关系:
+
+```tsx
+<EditableTable
+    setMenuIndex = {setMenuIndex}
+    entityName = {entityName}
+    entityTableColumns = {entityTableColumns}
+    entityCreateFields = {entityCreateFields}
+    entityEditFields = {entityEditFields}
+    addprosConfig = {addprosConfig}
+></EditableTable>
+```
+
+- 功能包括
+  - 修改对象本身，以及对象之间的关系
+  - 增加对象，以及对象之间的关系
+  - 查询对象
+
+
+
+
+
+# 使用方法
+
+## 登录注册
+
+
+
+![image-20240802204951323](./README.assets/image-20240802204951323.png)
+
+
+
+
 
 ## 数据展示
 
