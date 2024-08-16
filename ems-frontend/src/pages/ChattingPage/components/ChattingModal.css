@@ -1,0 +1,8 @@
+.chatting-app-container {
+    width: 1500px;
+    height: 900px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    border-radius: 25px;
+}

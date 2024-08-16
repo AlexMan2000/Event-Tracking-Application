@@ -4,6 +4,7 @@ import { RootState } from "../../store"
 
 export interface UserState {
   email: string | null;
+  nickname: string | null;
   firstName: string | null;
   lastName: string | null;
   middleName: string | null;
@@ -16,6 +17,7 @@ export interface UserState {
 
 const initialState: UserState = {
   email: "",
+  nickname: "",
   firstName: "",
   lastName: "",
   middleName: "",
@@ -31,6 +33,7 @@ export const userSlice = createSlice({
   reducers: {
     setUserInfo: (state, action: PayloadAction<UserState>) => {
       state.email = action.payload.email;
+      state.nickname = action.payload.nickname;
       state.firstName = action.payload.firstName;
       state.middleName = action.payload.middleName;
       state.lastName = action.payload.lastName;
@@ -41,6 +44,7 @@ export const userSlice = createSlice({
     },
     clearUserInfo: (state) => {
       state.email = null;
+      state.nickname = null;
       state.firstName = null;
       state.middleName = null;
       state.lastName = null;

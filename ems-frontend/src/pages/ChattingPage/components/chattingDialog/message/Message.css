@@ -1,0 +1,30 @@
+.image-message-wrapper {
+    height: 100px;
+    width: 100px;
+    padding: 20px;
+}
+
+
+.chat-message-container {
+    padding: 12px;
+    border-radius: 16px;
+    font-family: Manrope;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 19.12px;
+    text-align: left;
+    
+
+}   
+
+.chat-message-container.left {
+    align-self: flex-start;
+    background: #FFFFFF;
+
+}
+
+.chat-message-container.right {
+    align-self: flex-end;
+    background: #5B96F7;
+    color: white;
+}

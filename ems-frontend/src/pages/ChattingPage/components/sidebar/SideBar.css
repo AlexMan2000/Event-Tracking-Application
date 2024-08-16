@@ -1,0 +1,77 @@
+.sidebar-container {
+    border-radius: 20px 0px 0px 20px;
+    padding: 30px;
+    height: 100%;
+    background-color: #F0F4FA;
+    width: 6%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    z-index:2;
+}
+
+
+.top-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-self: center;
+    gap: 30px;
+
+}
+
+
+.top-group .top-icon {
+    background-color: #AFBBF7;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 55px;
+    height: 55px;
+}
+
+/** 一级菜单可点击元素 */
+.top-group .icon-wrapper {
+    width: 50px;
+    height: 50px;
+    transition: box-shadow 0.2s ease-in-out;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+
+    /** If I only have a white svg and want to change to black */ 
+    filter: brightness(0) saturate(100%);
+
+    /** The opposite functionality */
+    /* filter: invert(1); */
+}
+
+
+.top-group .icon-wrapper.selected {
+    
+    filter: brightness(100%);
+    border-radius: 10px;
+    background-color: #5B96F7;
+
+}
+
+.top-group .icon-wrapper:hover {
+    box-shadow: rgba(0,0,0,0.8);
+    
+}
+
+.top-group .icon-wrapper.selected {
+    background-color: #5B96F7;
+}
+
+.bottom-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-self: center;
+    gap: 30px;
+}

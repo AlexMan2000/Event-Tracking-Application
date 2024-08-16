@@ -18,10 +18,7 @@ interface MessageContextProps {
  */
 const MessageContext: React.FC<MessageContextProps> = ({style, className}: MessageContextProps) => {
   
-  
-    
-  
-  
+
     return (
     <div className={classNamesArgs("message-context", className)}
     >

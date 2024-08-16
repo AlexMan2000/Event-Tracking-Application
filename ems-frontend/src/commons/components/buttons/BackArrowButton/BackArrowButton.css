@@ -1,0 +1,16 @@
+.back-button-container {
+
+
+    cursor: pointer;
+    padding: 5px;
+    
+    transition: filter 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    border-radius: 50%;
+}
+
+
+
+.back-button-container:hover {
+    filter: invert(1);
+    background-color: #727375;
+}

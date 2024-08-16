@@ -1,0 +1,83 @@
+.user-box-container {
+
+    display: flex;
+    width: 320px;
+    height: 100px;
+    padding: 20px;
+    background-color:#FFFFFF;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px ;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease-in-out;
+
+}
+
+
+.user-box-container:hover {
+    box-shadow: 0px 0px 4px 0px #00000040;
+}
+
+
+.user-box-right-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    width: 80%;
+}
+
+
+.user-box-title-text {
+    font-family: Manrope;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 21.86px;
+    text-align: left;
+    
+}
+
+.user-box-title-time {
+    font-family: Manrope;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16.39px;
+    text-align: left;
+    color: #686768;
+
+}
+
+
+
+.user-box-right-group .user-box-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.user-box-right-group .user-box-message {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.user-box-message-text {
+    width: 70%;
+    color: #7C7C7D;
+    font-family: Manrope;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 19.12px;
+    text-align: left;
+}
+
+.user-box-message {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

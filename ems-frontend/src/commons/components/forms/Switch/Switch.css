@@ -1,0 +1,29 @@
+.switch-container {
+    width: 53px;
+    height: 28px;
+    background-color: #ccc;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 2px;
+    transition: background-color 0.3s ease;
+}
+
+
+.switch-container.checked {
+    background-color: #4a90e2;
+}
+
+
+.toggle {
+    width: 24px;
+    height: 24px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.switch-container.checked .toggle {
+    transform: translateX(25px);
+  }

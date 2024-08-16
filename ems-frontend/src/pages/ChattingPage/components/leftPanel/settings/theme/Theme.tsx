@@ -1,20 +1,20 @@
 import React, { CSSProperties } from 'react';
-import "./ComponentName.css"
+import "./Theme.css"
 import {classNamesArgs} from "@/commons/utils/classNameHandler"
 import {getStyles, pagePos} from "@/commons/utils/stylesHandler"
 
-interface MessageListProps {
+interface ThemeProps {
   // Define your props here
   style?: CSSProperties
   className?: string
 }
 
-const MessageList: React.FC<MessageListProps> = ({style, className}: MessageListProps) => {
+const Theme: React.FC<ThemeProps> = ({style, className}: ThemeProps) => {
   return (
-    <div className={classNamesArgs("message-container", className)}>
-      MessageList Component
+    <div className={classNamesArgs("theme-container", className)} style={{...style}}>
+      Theme Component
     </div>
   );
 };
 
-export default MessageList;
+export default Theme;
